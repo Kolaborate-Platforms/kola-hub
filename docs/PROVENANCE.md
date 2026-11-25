@@ -54,6 +54,9 @@ Each new dependency needs a reason, a licence check and a size check in its PR. 
 | `proptest` | 1.x | MIT OR Apache-2.0 | Fuzz style tests only | Not shipped |
 | `tauri`, `tauri-build` | 2.x | Apache-2.0 OR MIT | The window shell (spec decision 2). Brings seven MPL-2.0 crates, listed in `deny.toml` | App 4.73 MB on macOS. Windows not measured |
 | `serde`, `serde_json` | 1.x | MIT OR Apache-2.0 | Command types between shell and interface | Included above |
+| `rusqlite` (feature `bundled`, brings `libsqlite3-sys` and SQLite) | 0.41 | MIT (SQLite is public domain) | The project database in `kh-store`: WAL, `synchronous=FULL`, `user_version` migrations. `bundled` so nothing needs installing on the laptop | Not measured yet |
+| `sha2` | 0.11 | MIT OR Apache-2.0 | SHA-256 for the content store, so stored content is checked on read | Not measured yet |
+| `serde` and `serde_json` | 1.x | MIT OR Apache-2.0 | Trash journal entries, the recent projects list, and the serialisable types that reach the interface | Not measured yet |
 
 ## Bundled assets
 

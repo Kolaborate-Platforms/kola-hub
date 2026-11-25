@@ -205,7 +205,7 @@ pub enum NewFilePermissions {
 /// for settings and other private data. Existing files always stage privately before replacement.
 ///
 /// ```
-/// use craft_atomic::{NewFilePermissions, WriteOptions};
+/// use kh_store::atomic::{NewFilePermissions, WriteOptions};
 /// let private = WriteOptions::default().with_new_file_permissions(NewFilePermissions::Private);
 /// # let _ = private;
 /// ```
