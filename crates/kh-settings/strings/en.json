@@ -1,0 +1,10 @@
+{
+  "rail.home": "Home",
+  "rail.files": "Files",
+  "rail.clean": "Clean",
+  "rail.annotate": "Annotate",
+  "rail.backup": "Backup",
+  "rail.settings": "Settings",
+  "status.offline": "Works offline",
+  "files.count": { "one": "{count} file", "other": "{count} files" }
+}
