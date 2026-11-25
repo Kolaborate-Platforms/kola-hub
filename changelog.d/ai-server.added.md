@@ -1,0 +1,1 @@
+AI server: an optional local program lets an assistant you already use read your files, suggest cleaning steps and save cleaned copies. It is off until you switch on AI access in Settings, never changes originals and never sees file locations.

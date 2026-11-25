@@ -24,6 +24,33 @@ impl Project {
         Ok(())
     }
 
+    /// Saves `steps` only when the saved text is still `expected`. The check and the write are one
+    /// statement, so two programs cannot both pass the check. Returns false when someone else saved first.
+    pub fn replace_clean_steps(
+        &self,
+        file: &FileId,
+        expected: Option<&str>,
+        steps: &str,
+    ) -> Result<bool> {
+        if steps.len() > MAX_STEPS_BYTES {
+            return Err(StoreError::Conflict(
+                "This list of steps is too long to save.",
+            ));
+        }
+        self.rel_of(file)?;
+        let changed = match expected {
+            None => self.connection().execute(
+                "INSERT OR IGNORE INTO clean_steps (file_id, steps, updated_at) VALUES (?1, ?2, ?3)",
+                params![file.as_str(), steps, now_unix()],
+            )?,
+            Some(old) => self.connection().execute(
+                "UPDATE clean_steps SET steps = ?2, updated_at = ?3 WHERE file_id = ?1 AND steps = ?4",
+                params![file.as_str(), steps, now_unix(), old],
+            )?,
+        };
+        Ok(changed == 1)
+    }
+
     /// The saved step list text of a file, or `None` when none was saved.
     pub fn load_clean_steps(&self, file: &FileId) -> Result<Option<String>> {
         self.rel_of(file)?;
@@ -100,5 +127,27 @@ mod tests {
         let p = Project::open_or_create(d.path()).expect("reopen");
         let id = p.register_file("a.csv").expect("reg");
         p.save_clean_steps(&id, "x").expect("save");
+    }
+
+    #[test]
+    fn a_replace_from_a_stale_copy_changes_nothing() {
+        let (_d, p, id) = project();
+        assert!(p.replace_clean_steps(&id, None, "one").expect("first"));
+        assert!(
+            !p.replace_clean_steps(&id, None, "other")
+                .expect("stale insert")
+        );
+        assert!(
+            p.replace_clean_steps(&id, Some("one"), "two")
+                .expect("update")
+        );
+        assert!(
+            !p.replace_clean_steps(&id, Some("one"), "three")
+                .expect("stale update")
+        );
+        assert_eq!(
+            p.load_clean_steps(&id).expect("load").as_deref(),
+            Some("two")
+        );
     }
 }

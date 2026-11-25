@@ -354,3 +354,24 @@ fn saved_steps_that_cannot_be_read_are_kept_aside() {
     let kept = project.blobs_of(&s.file).expect("blobs");
     assert_eq!(kept.len(), 1);
 }
+
+#[test]
+fn a_step_list_changed_by_another_session_is_not_overwritten() {
+    let s = setup();
+    let first = open(&s).session_id;
+    let second = open(&s).session_id;
+    clean_add_step(&s.shell, &second, trim()).expect("second saves");
+    let error = clean_add_step(&s.shell, &first, Step::RemoveEmptyRows).expect_err("stale");
+    assert_eq!(error.code, "steps-changed-elsewhere");
+    assert!(
+        clean_state(&s.shell, &first)
+            .expect("state")
+            .steps
+            .is_empty()
+    );
+    clean_close(&s.shell, &first).expect("close");
+    let fresh = open(&s);
+    assert_eq!(fresh.state.steps.len(), 1);
+    assert_eq!(fresh.state.steps[0].step, trim());
+    clean_add_step(&s.shell, &fresh.session_id, Step::RemoveEmptyRows).expect("fresh saves");
+}

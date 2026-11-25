@@ -10,6 +10,13 @@ Every tool action as a plain function over the crates below: projects, files, re
 backup and Clean sessions. `kh-app` (the window) and `kh-mcp` (the AI server) only forward to it. It has no window
 code and returns no file paths.
 
+## kh-mcp (spec decision 11, `contracts/mcp.md`)
+
+The AI server, a console program named `kola-hub-mcp`. Hand-written JSON-RPC over standard input and output, no
+async runtime and no MCP library. Depends on `kh-service` (never `kh-app`). `kh_mcp::serve(reader, writer,
+data_dir)` answers one line at a time, reads the settings again and makes a new `Shell` for every tool call, and
+closes the Clean session it opened. Tests drive it through in-memory readers and writers.
+
 ## kh-store (spec 6)
 
 - `Project`: open or create the hidden `.kola-hub/` folder (`project.sqlite` with `PRAGMA user_version`,

@@ -2003,6 +2003,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "kh-mcp"
+version = "0.0.0"
+dependencies = [
+ "kh-clean",
+ "kh-service",
+ "kh-settings",
+ "kh-store",
+ "serde",
+ "serde_json",
+ "tempfile",
+]
+
+[[package]]
 name = "kh-service"
 version = "0.0.0"
 dependencies = [

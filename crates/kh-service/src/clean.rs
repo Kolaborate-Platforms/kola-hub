@@ -73,6 +73,8 @@ pub struct Session {
     fixes: Vec<Fixed>,
     view: View,
     profile: Option<Profile>,
+    /// The step text in the project when this session last read or wrote it.
+    saved_steps: Option<String>,
 }
 
 /// What the interface needs to draw the step list and the result.
@@ -203,9 +205,19 @@ impl Session {
         }
     }
 
-    fn persist(&self) -> AppResult<()> {
-        self.project
-            .save_clean_steps(&self.file, &self.steps.to_json())?;
+    /// Refuses when another program saved a different list since this session last looked.
+    fn persist(&mut self) -> AppResult<()> {
+        let text = self.steps.to_json();
+        let saved =
+            self.project
+                .replace_clean_steps(&self.file, self.saved_steps.as_deref(), &text)?;
+        if !saved {
+            return Err(AppError::new(
+                "steps-changed-elsewhere",
+                "The steps for this file were changed in another window. Nothing was saved. Open the file again to see them.",
+            ));
+        }
+        self.saved_steps = Some(text);
         Ok(())
     }
 
@@ -345,9 +357,10 @@ pub fn clean_open(shell: &Shell, project: &ProjectId, file: &FileId) -> AppResul
     let project = shell.project(project)?;
     let file_name = project.display_name(file)?;
     let source = read_table(&project, file)?;
-    let steps = match project.load_clean_steps(file)? {
+    let saved_steps = project.load_clean_steps(file)?;
+    let steps = match &saved_steps {
         None => StepList::new(),
-        Some(text) => match StepList::from_json(&text) {
+        Some(text) => match StepList::from_json(text) {
             Ok(list) => list,
             Err(StepListError::Unreadable(_)) => {
                 // The next change writes over the saved text, so a copy is kept first.
@@ -367,6 +380,7 @@ pub fn clean_open(shell: &Shell, project: &ProjectId, file: &FileId) -> AppResul
         fixes: Vec::new(),
         view,
         profile: None,
+        saved_steps,
     };
     let state = session.state();
     let created = CleanSession {

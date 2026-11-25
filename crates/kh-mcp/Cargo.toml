@@ -1,0 +1,26 @@
+[package]
+name = "kh-mcp"
+description = "The AI server: lets an assistant the person already uses work with Kola Hub's tools over standard input and output."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "kola-hub-mcp"
+path = "src/main.rs"
+
+[dependencies]
+kh-clean = { path = "../kh-clean" }
+kh-service = { path = "../kh-service" }
+kh-settings = { path = "../kh-settings" }
+kh-store = { path = "../kh-store" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tempfile = "3"
