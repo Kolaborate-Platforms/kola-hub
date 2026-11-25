@@ -1,0 +1,81 @@
+name: Shell spike (sizes)
+
+# Throwaway: deleted with the losing demo once the shell is signed.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "spikes/**"
+      - "crates/kh-core/**"
+      - "crates/kh-formats/**"
+      - ".github/workflows/shell-spike.yml"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  egui:
+    name: egui size and bench
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.97.0"
+      - name: Build
+        working-directory: spikes/egui-grid
+        run: cargo build --release --locked
+      - name: Generate test file
+        run: cargo run --release -p kh-formats --example gen_big_csv -- 100000 100k.csv
+      - name: Size
+        shell: pwsh
+        run: |
+          Get-ChildItem spikes/egui-grid/target/release/*.exe |
+            ForEach-Object { "{0}: {1:N2} MB" -f $_.Name, ($_.Length / 1MB) } |
+            Tee-Object -Append $env:GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: egui-grid
+          path: |
+            spikes/egui-grid/target/release/*.exe
+            100k.csv
+
+  tauri:
+    name: Tauri size (${{ matrix.variant }})
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [skip, embed, offline]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.97.0"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install front end tools
+        working-directory: spikes/tauri-grid
+        run: pnpm install --frozen-lockfile
+      - name: Bundle
+        working-directory: spikes/tauri-grid
+        shell: pwsh
+        run: |
+          $extra = @()
+          if ("${{ matrix.variant }}" -ne "skip") { $extra = @("--config", "src-tauri/webview-${{ matrix.variant }}.json") }
+          pnpm tauri build @extra
+      - name: Size
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse spikes/tauri-grid -Include *.exe |
+            Where-Object { $_.FullName -match 'release' -and $_.FullName -notmatch '\\(build|deps|node_modules)\\' } |
+            ForEach-Object { "${{ matrix.variant }} {0}: {1:N2} MB" -f $_.Name, ($_.Length / 1MB) } |
+            Tee-Object -Append $env:GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tauri-grid-${{ matrix.variant }}
+          path: spikes/tauri-grid/**/release/bundle/**/*.exe
