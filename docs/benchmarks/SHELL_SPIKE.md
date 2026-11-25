@@ -9,11 +9,11 @@ The Tauri demo now lives in `crates/kh-app` and `ui/`. Bench mode is described i
 
 ## What was built
 
-Two demos that follow `spikes/README.md`: a grid over the whole CSV that fetches only the visible rows, one
+Two demos with the same features: a grid over the whole CSV that fetches only the visible rows, one
 editable cell, and a "Go to last row" button.
 
-- `spikes/egui-grid`: eframe 0.37 with the OpenGL (`glow`) renderer.
-- `spikes/tauri-grid`: Tauri 2.12 with plain TypeScript.
+- `egui-grid`: eframe 0.37 with the OpenGL (`glow`) renderer.
+- `tauri-grid`: Tauri 2.12 with plain TypeScript.
 
 ## Measured on the Mac
 
@@ -59,8 +59,7 @@ Sizes are in MB of 1,000,000 bytes.
 | Windows WebView2 with `connect-src 'none'` | On macOS Tauri still worked with it, probably by falling back to a slower message route. Unconfirmed on Windows |
 | egui on an old graphics driver, a virtual machine or remote desktop | `glow` needs a newer OpenGL than the basic Windows driver offers. If it fails there, egui cannot start at all. This is the largest unknown on the egui side |
 
-`.github/workflows/shell-spike.yml` builds both on a Windows runner and prints sizes. It has never run:
-GitHub Actions is blocked by a billing lock on the account.
+A temporary workflow was written to build both on a Windows runner and print sizes. It never ran.
 
 ## Licences and dependency rules
 
@@ -72,7 +71,7 @@ GitHub Actions is blocked by a billing lock on the account.
 | Tauri | Licences fail, everything else passes | Seven crates are `MPL-2.0` (a file-level copyleft licence): `cssparser` (two versions), `cssparser-macros`, `dtoa-short`, `option-ext`, `selectors` (two versions). They come with Tauri and cannot be dropped |
 
 Spec 11.3 allows "MIT, Apache-2.0, BSD or similarly permissive". Whether `MPL-2.0` or the font licences count is
-the maintainer's call.
+a decision for the maintainers.
 
 Without the Windows limit, Tauri also fails the network ban: it pulls `reqwest` and `hyper` for phone builds, and
 carries an unmaintained-crate notice (`RUSTSEC-2024-0370`). Neither HTTP crate is in the Windows, macOS or Linux
@@ -98,7 +97,7 @@ budgets.
 
 ## Still to do on Windows
 
-1. Fix the GitHub billing lock, or build on a Windows machine.
+1. Build on a Windows runner or a Windows machine.
 2. On the reference laptop, run `scripts/measure-shell.ps1 -Exe <app.exe> -Csv 100k.csv`. The script has never
    been run, so expect to fix it.
 3. Follow the test plan in `WEBVIEW2.md` on a clean Windows 10 machine with the offline installer.
@@ -106,6 +105,6 @@ budgets.
 
 | Decision | Signed by | Date |
 |----------|-----------|------|
-| Shell: Tauri, with the offline WebView2 installer | the maintainer | 25 November 2026 |
-| Installer size budget changed to include WebView2 | the maintainer | 25 November 2026 |
+| Shell: Tauri, with the offline WebView2 installer | Maintainer | 25 November 2026 |
+| Installer size budget changed to include WebView2 | Maintainer | 25 November 2026 |
 | Other budgets (spec section 4) | not signed | |

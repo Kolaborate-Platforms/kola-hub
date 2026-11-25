@@ -5,14 +5,14 @@ Every piece of code or data we did not write ourselves is listed here. See `docs
 Rules in short:
 
 - Permissive licences only (MIT, Apache-2.0, BSD). No GPL or AGPL.
-- Code from the maintainer's Agent HQ or hq-suite is copied only after the maintainer signs off, per file or crate. No entry here, no copy.
+- Code from Agent HQ or hq-suite is copied only after its owner signs off, per file or crate. No entry here, no copy.
 - Code from storytold/craft-libs is used only after the check below, and never as a git dependency on a moving branch.
 
 ## Copied or vendored code
 
-| Date | What | Source repo | Path | Commit | Licence | Sign-off (the maintainer) | Notes |
+| Date | What | Source repo | Path | Commit | Licence | Owner sign-off | Notes |
 |------|------|-------------|------|--------|---------|-------------------|-------|
-| 2026-11-25 | Atomic file writing | `storytold/craft-libs` | `crates/atomic/src/lib.rs` | `05b99ee5dcd64f2c954a693ef361301214ddc3c7` | MIT OR Apache-2.0 (used under Apache-2.0) | Not needed (not the maintainer's code) | In `crates/kh-store/src/atomic.rs`. One test path changed. Needs `rustix` on macOS |
+| 2026-11-25 | Atomic file writing | `storytold/craft-libs` | `crates/atomic/src/lib.rs` | `05b99ee5dcd64f2c954a693ef361301214ddc3c7` | MIT OR Apache-2.0 (used under Apache-2.0) | Not needed (third party code) | In `crates/kh-store/src/atomic.rs`. One test path changed. Needs `rustix` on macOS |
 
 ## Candidate crates from storytold/craft-libs
 

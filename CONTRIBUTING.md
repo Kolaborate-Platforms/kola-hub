@@ -17,9 +17,27 @@ focused, changes go through the maintainers.
    cargo nextest run --workspace
    cargo test --workspace --doc
    cargo deny check
+   bash scripts/test-privacy-check.sh
    ```
 
 5. **Add a changelog note** for anything a user can see: one file, `changelog.d/<slug>.<kind>.md`.
+
+## Keep personal information out
+
+This repository is public and its history is permanent. Set this up before your first commit.
+
+1. Install [gitleaks](https://github.com/gitleaks/gitleaks) (version 8.30 or newer).
+2. Turn on the git hooks. `pnpm install` does it for you, or run `git config core.hooksPath .githooks`.
+3. Commit with your GitHub no-reply address: `git config user.email "ID+NAME@users.noreply.github.com"`. GitHub
+   shows yours under Settings, Emails.
+4. Optional: list private words that must never be committed (your own address, client names, host names), one
+   pattern per line, in `.git/info/private-denylist`. That file stays on your computer.
+
+The hooks check each change, each commit message and everything you push. The same check runs in CI. If it stops
+you, fix the cause. Do not use `--no-verify`. If a real secret or personal detail was already pushed, change the
+secret first, then tell a maintainer privately (see [`SECURITY.md`](SECURITY.md)).
+
+The check cannot recognise everything, for example a person's name in a test file. Read your own changes too.
 
 ## Rules we hold firmly
 

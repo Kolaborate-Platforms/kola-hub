@@ -1,11 +1,11 @@
 # Kola Hub: build spec
 
 Version 1.0, 25 November 2026.
-Repo: `Kolaborate-Platforms/kola-hub`. Licence: Apache-2.0 (open source).
+Repository: `Kolaborate-Platforms/kola-hub`. Licence: Apache-2.0.
 
 This is the document a coding agent builds from. Read it top to bottom once, then work from section 14
 (first tasks). When this spec and any other document disagree, this spec wins. When something here is
-marked **Proposed**, **Unverified** or **Open**, do not treat it as settled: measure it, check it, or ask the maintainer.
+marked **Proposed**, **Unverified** or **Open**, do not treat it as settled: measure it, check it, or ask a maintainer.
 
 ---
 
@@ -35,23 +35,22 @@ real job without help, on the machines our users actually own.
 
 ## 2. Decisions
 
-the maintainer accepted the recommendations in the Plan v2 document on 25 November 2026, with the additions in the
-last two rows. Status: **Locked** means build on it. **Gate** means build on it unless the Phase 0 spike
+These decisions were accepted on 25 November 2026. Status: **Locked** means build on it. **Gate** means build on it unless the Phase 0 spike
 disproves it. **Open** means it does not block the build.
 
 | # | Decision | Status | Notes |
 |---|----------|--------|-------|
 | 1 | First tools: Clean, then Annotate. Annotate starts with text records, then images (boxes first, shapes later) | Locked | Sheets, Docs, Slides, Dashboards wait for the pilot gate |
-| 2 | Shell: Tauri with a TypeScript front end over a GUI-free Rust core | Locked | Chosen by the maintainer on 25 November 2026 after the Phase 0 spike (`docs/benchmarks/SHELL_SPIKE.md`). Windows measurements are still to be taken. See 5.4 |
+| 2 | Shell: Tauri with a TypeScript front end over a GUI-free Rust core | Locked | Chosen on 25 November 2026 after the Phase 0 spike (`docs/benchmarks/SHELL_SPIKE.md`). Windows measurements are still to be taken. See 5.4 |
 | 3 | One app, tools as modules, each tool its own crate so any can leave later | Locked | One installer, one signature, one update path |
 | 4 | Open source, Apache-2.0, public repo | Locked | See 11.3 for reuse and provenance rules |
 | 5 | Name Kola Hub, repo `kola-hub` | Locked | |
-| 6 | Builder: coding agents, started manually by the maintainer one phase at a time, the maintainer reviews every PR | Locked | No human-hours schedule exists. Phases are gated by exit tests, not dates |
-| 7 | Who funds upkeep | **Open** | Does not block phases 0 to 3. Must be answered before public 1.0 because of the code-signing certificate (yearly cost). |
-| 8 | Design | Locked | The desktop canvas is built (section 13). Boards 1 to 21 are the target. Boards 22 onward are web drafts for later tools |
+| 6 | Builder: coding agents, started by a maintainer one phase at a time, and a maintainer reviews every PR | Locked | No human-hours schedule exists. Phases are gated by exit tests, not dates |
+| 7 | Who funds upkeep | **Open** | Does not block phases 0 to 3. Must be answered before 1.0 because of the code-signing certificate (yearly cost). |
+| 8 | Design | Locked | The desktop design boards exist (section 13). Boards 1 to 21 are the target. Boards 22 onward are web drafts for later tools |
 | 9 | Focus: offline behaviour, install size and performance on low-end machines, above feature count | Locked | Enforced by budgets in section 4 and CI gates in section 11 |
 | 10 | Windows 10 and 11 first, 64-bit. macOS and Linux follow from the same code | Locked | |
-| 11 | A local MCP server (`kola-hub-mcp`) so AI tools can use Kola Hub's tools | Locked | Added by the maintainer on 25 November 2026. Standard input and output only, off by default, only projects already opened in the app, no permanent delete, no backup or passphrases. See `docs/contracts/mcp.md` |
+| 11 | A local MCP server (`kola-hub-mcp`) so AI tools can use Kola Hub's tools | Locked | Added on 25 November 2026. Standard input and output only, off by default, only projects already opened in the app, no permanent delete, no backup or passphrases. See `docs/contracts/mcp.md` |
 
 ---
 
@@ -61,7 +60,7 @@ First users: learners and early-career data workers, then small
 organisations that cannot buy a tool per task. Typical machine: a shared or second-hand Windows laptop,
 patchy or no internet, little free disk, no admin rights.
 
-**Reference machine.** the maintainer will name the slowest real laptop available for testing. Until then, use
+**Reference machine.** The maintainers will name the slowest real laptop available for testing. Until then, use
 this stand-in for every benchmark and say so in the results:
 
 - Windows 10 64-bit, 2 CPU cores at about 1.6 GHz, 4 GB RAM, 1366 by 768 screen
@@ -69,18 +68,18 @@ this stand-in for every benchmark and say so in the results:
 - Free disk: 5 GB
 - No internet, no admin rights, no other software assumed (not even Excel)
 
-Record the real machine in `docs/benchmarks/REFERENCE_MACHINE.md` as soon as the maintainer supplies it.
+Record the real machine in `docs/benchmarks/REFERENCE_MACHINE.md` once it is chosen.
 
 ---
 
 ## 4. Budgets (Proposed)
 
 These numbers are my starting proposal, not measurements. Phase 0 replaces them with measured baselines and
-the maintainer signs off the final budgets. After that, CI fails a PR that breaks a budget (section 11.1).
+A maintainer signs off the final budgets. After that, CI fails a PR that breaks a budget (section 11.1).
 
 | Area | Budget |
 |------|--------|
-| Installer size (Windows, offline installer with WebView2 inside) | 155 MB or less: 25 MB for the app plus about 127 MB for WebView2, accepted by the maintainer on 25 November 2026 |
+| Installer size (Windows, offline installer with WebView2 inside) | 155 MB or less: 25 MB for the app plus about 127 MB for WebView2, accepted on 25 November 2026 |
 | Installed size, all phase 1 and 2 tools | 60 MB or less |
 | Cold start to usable home screen, reference machine | 2 s or less |
 | Idle memory with home screen open | 150 MB or less |
@@ -164,7 +163,7 @@ button, in Tauri and in egui (eframe). Measure on the reference machine and writ
 input latency, and behaviour on a clean Windows 10 machine with no WebView2.
 
 Decision rule: **Tauri wins if it meets every budget in section 4 and installs offline without a huge bundle.
-Otherwise egui wins.** Either way the Rust core is identical. the maintainer signs the decision in the PR.
+Otherwise egui wins.** Either way the Rust core is identical. A maintainer signs the decision in the PR.
 
 ---
 
@@ -205,7 +204,7 @@ One sealed archive for every project, to a USB drive or folder, protected by a p
 
 ## 7. The tools
 
-Screens are in the design canvas (section 13). Board numbers below match the canvas titles.
+Screens are on the design boards (section 13). Board numbers below match their titles.
 
 ### 7.1 Clean (Phase 1). Boards 9, 10, 11
 
@@ -317,7 +316,7 @@ gap, not a solved problem.
 
 ## 10. Phases and gates
 
-Each gate is a yes or no test. Do not start the next phase until the gate passes and the maintainer says so.
+Each gate is a yes or no test. Do not start the next phase until the gate passes and a maintainer says so.
 
 | Phase | Scope | Gate (all must be true) |
 |-------|-------|-------------------------|
@@ -366,10 +365,10 @@ The repo is open source under Apache-2.0. That has consequences for what we may 
   **Unverified**: I read the list, not the code. In Phase 0, for each candidate crate record in
   `docs/PROVENANCE.md`: name, version or commit, licence file, what we use, size cost, and a keep/replace verdict.
   Do not take a git dependency on a moving branch; pin a commit or vendor with attribution.
-- **Agent HQ / hq-suite** (code owned personally by the maintainer, written under a closed-contribution policy): code copied
-  from here into this open repo needs the maintainer's explicit sign-off for each file or crate, because he is
-  relicensing his own code under Apache-2.0. Record each in `docs/PROVENANCE.md` with source repo, path, commit
-  and the date of sign-off. Without that entry, do not copy it. Reading it for design ideas is always fine.
+- **Agent HQ / hq-suite**: code copied from there into this repository needs the explicit sign-off of its owner for
+  each file or crate, because it is being relicensed under Apache-2.0. Record each in `docs/PROVENANCE.md` with
+  source repository, path, commit and the date of sign-off. Without that entry, do not copy it. Reading it for
+  design ideas is always fine.
 - **Everything else:** only MIT, Apache-2.0, BSD or similarly permissive licences. No GPL or AGPL code. `cargo deny`
   enforces this.
 - Candidate well-known crates to evaluate (licences and sizes still to be checked): `csv`, `calamine` (read
@@ -378,24 +377,19 @@ The repo is open source under Apache-2.0. That has consequences for what we may 
 
 ---
 
-## 12. Reference repositories (for further digging)
+## 12. Reference projects
 
-| Repo | Why | Notes |
-|------|-----|-------|
-| `Kolaborate-Platforms/kola-hub` | The target repo | Private and empty at the time of writing. Becomes public at first release |
-| `storytold/craft-libs` and `storytold/craft-launcher` | Shape of the suite: shared libraries, one launcher, atomic saves, settings, i18n, update checks | Apache-2.0 per the org listing. Check each crate. Note the launcher's Windows antivirus incident (section 9) |
-| Tauri v2 docs, Windows installer page | WebView2 install modes, per-user install, updater | Check before the spike |
+| Project | Why | Notes |
+|---------|-----|-------|
+| `storytold/craft-libs` and `storytold/craft-launcher` | Shape of the suite: shared libraries, one launcher, atomic saves, settings, i18n, update checks | Apache-2.0 per the organisation listing. Check each crate. Note the launcher's Windows antivirus incident (section 9) |
+| Tauri v2 docs, Windows installer page | WebView2 install modes, per-user install, updater | Check before releases |
 | LibreOffice Calc, OpenRefine, Label Studio | Comparison targets for the pilot | We have to beat them on weight and first-job ease on low-end machines |
 
 ---
 
-## 13. Design references
+## 13. Design boards
 
-The design boards are not part of this repository. The requirements that matter are written into
-this spec.
-
-
-Canvas board map (titles as numbered on the canvas):
+The design boards are not part of this repository. The requirements that matter are written into this spec.
 
 | Boards | Content |
 |--------|---------|
@@ -406,9 +400,6 @@ Canvas board map (titles as numbered on the canvas):
 | 16 to 19 | Later tools: Sheets, Docs, Slides, Dashboards (desktop layouts) |
 | 20, 21 | How it is built; offline, saving and recovery |
 | 22 onward | Web drafts to adapt for later tools. Not a target for phases 0 to 3 |
-
-Superseded and not to be used: "Kola Hub: Desktop Architecture and Build Plan" (first plan) and the
-"Workspaces Build Specification". Both assume accounts and the Kolaborate platform.
 
 ---
 
@@ -423,7 +414,7 @@ Superseded and not to be used: "Kola Hub: Desktop Architecture and Build Plan" (
    CSV, XLSX, atomic write, settings, update and i18n are worth depending on.
 5. Build `kh-core` skeleton: streaming CSV reader, typed columns, windowed row access, with a 1,000,000 row
    generated test file and a benchmark.
-6. Run the shell spike (5.4) and the WebView2 test. Write the benchmark docs. Stop and ask the maintainer to sign the
+6. Run the shell spike (5.4) and the WebView2 test. Write the benchmark docs. Stop and ask a maintainer to sign the
    shell decision and the budgets before building further.
 7. Build `kh-store` (project folder, SQLite file with schema version, content store, atomic save, trash, storage
    budget) and `kh-backup`, each with tests including kill-during-write.
@@ -434,9 +425,8 @@ Superseded and not to be used: "Kola Hub: Desktop Architecture and Build Plan" (
 
 ---
 
-## 15. Open items for the maintainer
+## 15. Open items
 
 - Name the reference machine (section 3).
-- Decide the contributions policy for the public repo (my suggestion: source open, outside contributions by
-  issue first, maintainers decide).
-- Pick two real annotators and a real annotation job to co-design with before Phase 2 starts.
+- Decide who pays for upkeep, including the signing certificate (decision 7).
+- Pick two real annotators and a real annotation job to design with before Phase 2 starts.

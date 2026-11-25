@@ -32,7 +32,7 @@ allow = [
   "CC0-1.0",
 ]
 confidence-threshold = 0.9
-# MPL-2.0 crates that Tauri cannot do without. the maintainer approved these five names only on 25 November 2026.
+# MPL-2.0 crates that Tauri cannot do without. Only these five names were approved, on 25 November 2026.
 exceptions = [
   { crate = "cssparser", allow = ["MPL-2.0"] },
   { crate = "cssparser-macros", allow = ["MPL-2.0"] },

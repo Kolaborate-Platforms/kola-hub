@@ -1,0 +1,44 @@
+# Used by scripts/privacy-check.sh in the git hooks and in CI. This file is public:
+# never put a real private value in it. Private words belong in .git/info/private-denylist.
+title = "kola-hub"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "private-ai-link"
+description = "Link to a private AI conversation or document"
+regex = '''(?i)claude\.ai/(code|artifact|share|chat|public)[/_]'''
+
+[[rules]]
+id = "home-folder-path"
+description = "Path inside a personal home folder"
+regex = '''(?i)(/Users/|/home/|[A-Z]:[\\/]{1,2}Users[\\/]{1,2})[A-Za-z0-9._-]+'''
+[[rules.allowlists]]
+regexTarget = "match"
+regexes = ['''(?i)(Users[\\/]{1,2}|/home/)(runner|runneradmin|example|public)$''']
+
+[[rules]]
+id = "email-address"
+description = "Email address that is not a no-reply or example address"
+regex = '''[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}'''
+[[rules.allowlists]]
+regexTarget = "match"
+regexes = [
+  '''@users\.noreply\.github\.com$''',
+  '''^noreply@(anthropic|github)\.com$''',
+  '''^git@github\.com$''',
+  '''@([A-Za-z0-9-]+\.)*example\.(com|org|net)$''',
+  '''\.(test|invalid)$''',
+  '''@2x\.png$''',
+]
+
+[[rules]]
+id = "private-network"
+description = "Private network address or private host name"
+regex = '''\b((10\.\d{1,3}|192\.168|172\.(1[6-9]|2\d|3[01])|100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7]))\.\d{1,3}\.\d{1,3}|[A-Za-z0-9-]+\.ts\.net)\b'''
+
+[[rules]]
+id = "phone-number"
+description = "Looks like a telephone number"
+regex = '''(\+\d{1,3}[ -]?\d{3}[ -]?\d{3}[ -]?\d{3,4}\b|\b0[37]\d{8}\b)'''

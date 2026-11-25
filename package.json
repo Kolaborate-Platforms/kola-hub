@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "node scripts/setup-hooks.mjs",
     "typecheck": "tsc --noEmit -p ui",
     "build:ui": "tsc -p ui && node ui/copy-static.mjs",
     "build:preview": "tsc -p ui && node ui/copy-static.mjs --preview",

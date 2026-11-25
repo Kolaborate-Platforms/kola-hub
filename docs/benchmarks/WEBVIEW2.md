@@ -20,7 +20,7 @@ Microsoft says the Evergreen WebView2 Runtime is included in Windows 11, and tha
 
 Not checked: how long WebView2 will keep receiving updates on Windows 10, whose standard support ended on 14 October 2025. The three pages above do not say. Check Microsoft's lifecycle page before signing the shell decision.
 
-For Kola Hub's clean, offline Windows 10 requirement, the two documented ways to handle a missing runtime are `offlineInstaller` and `fixedRuntime`. Both exceed the proposed 25 MB installer budget by a wide margin before counting the app. The test below should record actual installer size and installation behavior on the maintainer's clean test machine.
+For Kola Hub's clean, offline Windows 10 requirement, the two documented ways to handle a missing runtime are `offlineInstaller` and `fixedRuntime`. Both exceed the proposed 25 MB installer budget by a wide margin before counting the app. The test below should record actual installer size and installation behavior on a clean test machine.
 
 ## Clean Windows 10 test plan
 

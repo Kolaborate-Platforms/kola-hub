@@ -25,21 +25,33 @@ and little or no internet. Size, start-up time, memory and offline behaviour mat
   section 4. A PR that breaks them fails CI. Report measured numbers in any PR that could change them.
 - **Treat every opened file as hostile.** Size limits, zip-bomb limits, no macros, fuzz the parsers.
 - **Licence hygiene.** Permissive licences only (MIT, Apache-2.0, BSD). No GPL or AGPL. The only exceptions are the
-  MPL-2.0 crates named in `deny.toml`, which Tauri requires. Code from the maintainer's
-  Agent HQ or hq-suite may be copied only with an entry in `docs/PROVENANCE.md` showing his sign-off. Code from
+  MPL-2.0 crates named in `deny.toml`, which Tauri requires. Code from
+  Agent HQ or hq-suite may be copied only with an entry in `docs/PROVENANCE.md` showing the owner's sign-off. Code from
   storytold/craft-libs only after the check described in spec section 11.3.
 - **Do not add scope.** Two tools until the pilot gate passes. If a task seems to need an account, a server,
-  sync, sharing or AI, stop and ask the maintainer. The one approved exception is the local MCP server over standard input
+  sync, sharing or AI, stop and ask a maintainer. The one approved exception is the local MCP server over standard input
   and output (spec decision 11, `docs/contracts/mcp.md`).
 - No secrets, real names, personal paths or real hostnames in code, tests or fixtures. Invent test data.
 
+## Privacy and security (this repository is public)
+
+- Never commit personal information: real names, email addresses, phone numbers, home folder paths, private host
+  names or addresses, links to private conversations or documents, client or internal project names.
+- Never add `Claude-Session` or other session links to commit messages, pull requests or files.
+- Never use `--no-verify`, `gitleaks:allow`, or change `.gitleaks.toml`, `.githooks/` or `scripts/privacy-check.sh`
+  to get a commit through. A change to those files needs a maintainer's explicit yes.
+- Commit with a GitHub no-reply address. Check that `git config core.hooksPath` says `.githooks`.
+- Do not commit screenshots, design exports, databases or real data files. Test data is invented and lives in
+  `tests/fixtures/`.
+- Pin GitHub Actions to full commit ids and keep workflow permissions read only.
+
 ## Disk space (important)
 
-the maintainer builds on a laptop. Rust debug builds grow to tens of gigabytes. Check free disk before big builds and
+Builds often run on small laptops. Rust debug builds grow to tens of gigabytes. Check free disk before big builds and
 after them (`df -h`), run `scripts/cargo-gc.sh` regularly, and say so in your report if free space drops under
 10 GB.
 
-## Commands (once the workspace exists)
+## Commands
 
 ```bash
 cargo check
@@ -49,17 +61,18 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo fmt --all
 cargo deny check
 ./scripts/cargo-gc.sh                # clean build artifacts
+bash scripts/test-privacy-check.sh   # proves the commit checks work
 ```
 
 ## Working agreements
 
 - Branch, small focused pull requests, tests for new behaviour. One PR per task in spec section 14.
-- At the end of each phase, stop and wait for the maintainer to review and say go. Do not start the next phase.
+- At the end of each phase, stop and wait for a maintainer to review and say go. Do not start the next phase.
 - Shortcuts you knowingly leave: one file in `docs/techdebt/<slug>.md`.
 - User-visible changes: one file in `changelog.d/<slug>.<kind>.md`.
 - No Rust file over 1,500 production lines.
 - Docs and UI strings: plain language, no stock AI phrases, avoid em dashes.
-- the maintainer writes for people who are not technical. If a screen or string needs jargon, rewrite it.
+- Write for people who are not technical. If a screen or string needs jargon, rewrite it.
 
 ## Where to look
 
@@ -68,4 +81,4 @@ cargo deny check
 | Decisions, budgets, phases | `docs/BUILD_SPEC.md` |
 | Measured numbers | `docs/benchmarks/` |
 | What we copied and from where | `docs/PROVENANCE.md` |
-| Reference repos | spec section 12 (storytold craft-libs) |
+| Reference projects | spec section 12 |

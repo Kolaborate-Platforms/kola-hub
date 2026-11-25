@@ -21,4 +21,4 @@ fi
 
 after=$(free_gb)
 echo "Free disk after:  ${after} GB"
-awk -v a="$after" 'BEGIN { if (a < 10) print "WARNING: free disk is under 10 GB. Tell the maintainer." }'
+awk -v a="$after" 'BEGIN { if (a < 10) print "WARNING: free disk is under 10 GB." }'
