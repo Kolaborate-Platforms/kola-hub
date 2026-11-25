@@ -6,9 +6,6 @@ on:
   pull_request:
     paths:
       - "spikes/**"
-      - "crates/kh-core/**"
-      - "crates/kh-formats/**"
-      - ".github/workflows/shell-spike.yml"
 
 env:
   CARGO_TERM_COLOR: always

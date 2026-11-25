@@ -33,9 +33,12 @@ Sizes are in MB of 1,000,000 bytes.
 
 ### Read these with care
 
-- **Scroll and edit times are not a fair race.** Tauri draws at the screen's 60 frames a second, so 17 ms is the
-  floor. On macOS eframe does not wait for the screen in the same way. Tauri's edit time also includes two
-  full frames. Both are well inside the 50 ms scroll budget here.
+- **Scroll and edit times are not a fair race.** The typical gaps match two frame rates, not two speeds. 8.3 ms
+  is 120 frames a second, this Mac's screen rate. 17 ms is 60 a second, which we take to be the web view's own
+  limit. On a 60 Hz laptop screen both would likely sit near 17 ms. Tauri's edit time also includes two full
+  frames. Both are inside the 50 ms scroll budget here.
+- Tauri was built with the strict `connect-src 'none'` rule from spec 5.3. This may push it onto a slower
+  message route (not confirmed), which would be a cost of that rule.
 - "Start to rows on screen" counts from the start of `main`, not from the double click, and covers reading the whole
   file. `scripts/measure-shell.ps1` measures from launch on Windows.
 - One early Tauri run, made by the worker that built it, took about 49 s to report ready. It did not happen again
@@ -54,8 +57,8 @@ Sizes are in MB of 1,000,000 bytes.
 | Windows WebView2 with `connect-src 'none'` | On macOS Tauri still worked with it, probably by falling back to a slower message route. Unconfirmed on Windows |
 | egui on an old graphics driver, a virtual machine or remote desktop | `glow` needs a newer OpenGL than the basic Windows driver offers. If it fails there, egui cannot start at all. This is the largest unknown on the egui side |
 
-`.github/workflows/shell-spike.yml` builds both on a Windows runner and prints sizes. It has never run: every
-GitHub Actions run in the organisation currently fails at startup.
+`.github/workflows/shell-spike.yml` builds both on a Windows runner and prints sizes. It has never run:
+GitHub Actions is blocked by a billing lock on the account.
 
 ## Licences and dependency rules
 
