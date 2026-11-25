@@ -64,7 +64,15 @@ impl From<kh_backup::Error> for AppError {
             E::Damaged => "wrong-passphrase-or-damaged",
             _ => "backup",
         };
-        Self::new(code, error.to_string())
+        // This one names a file inside the backup. Only its own name may cross to the interface.
+        let message = match &error {
+            E::FileChanged(path) => {
+                let name = path.rsplit('/').next().unwrap_or(path);
+                E::FileChanged(name.to_owned()).to_string()
+            }
+            _ => error.to_string(),
+        };
+        Self::new(code, message)
     }
 }
 
@@ -79,3 +87,17 @@ impl From<std::io::Error> for AppError {
 
 /// Result alias for command logic.
 pub type AppResult<T> = Result<T, AppError>;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_changed_file_is_named_without_its_folders() {
+        let error = AppError::from(kh_backup::Error::FileChanged(
+            "shop/private/sales.csv".into(),
+        ));
+        assert!(error.message.contains("sales.csv"));
+        assert!(!error.message.contains("private"));
+    }
+}

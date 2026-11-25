@@ -326,3 +326,31 @@ fn files_that_are_not_tables_fail_in_plain_words() {
     assert_eq!(error.code, "cannot-open");
     assert!(!error.message.contains(&*s.folder.path().to_string_lossy()));
 }
+
+#[test]
+fn an_oversized_step_is_refused_before_it_runs() {
+    let s = setup();
+    let id = open(&s).session_id;
+    clean_add_step(&s.shell, &id, trim()).expect("trim");
+    let huge = Step::RenameColumn {
+        from: "name".to_owned(),
+        to: "x".repeat(MAX_STEPS_BYTES + 1),
+    };
+    let refused = clean_add_step(&s.shell, &id, huge.clone()).expect_err("too large");
+    assert_eq!(refused.code, "steps-too-large");
+    assert!(clean_preview(&s.shell, &id, &huge, 0, 5).is_err());
+    assert_eq!(clean_state(&s.shell, &id).expect("state").steps.len(), 1);
+}
+
+#[test]
+fn saved_steps_that_cannot_be_read_are_kept_aside() {
+    let s = setup();
+    let project = s.shell.project(&s.project).expect("project");
+    project
+        .save_clean_steps(&s.file, "not a step list")
+        .expect("save");
+    let session = open(&s);
+    assert!(session.state.steps.is_empty());
+    let kept = project.blobs_of(&s.file).expect("blobs");
+    assert_eq!(kept.len(), 1);
+}

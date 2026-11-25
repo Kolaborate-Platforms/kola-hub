@@ -61,6 +61,15 @@ fn view(progress: Progress) -> ProgressView {
     }
 }
 
+/// The last part of an archive path. Folder names do not cross to the interface.
+fn file_name(archive_path: &str) -> String {
+    archive_path
+        .rsplit('/')
+        .next()
+        .unwrap_or(archive_path)
+        .to_owned()
+}
+
 /// One label per project: the folder's name, made unique with a number when two share it.
 fn sources_for(shell: &Shell, ids: &[ProjectId]) -> AppResult<Vec<Source>> {
     let mut sources: Vec<Source> = Vec::new();
@@ -97,7 +106,7 @@ pub fn backup_create(
     Ok(CreateReportView {
         files: report.files,
         bytes: report.bytes,
-        skipped: report.skipped,
+        skipped: report.skipped.iter().map(|p| file_name(p)).collect(),
     })
 }
 

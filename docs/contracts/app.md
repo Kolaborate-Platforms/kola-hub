@@ -49,7 +49,9 @@ Events: `backup-progress` with `{ files, bytes }`.
 - `FileRow`: `{ id, name, sizeBytes, kind }` where `kind` is `csv` or `other`. Excel files are `other` until XLSX
   support exists; the interface says it cannot open them yet.
 - `CleanSession`: `{ sessionId, fileName, rowCount, columns: string[], state: CleanState }`
-- `CleanState`: `{ steps: [{ name, enabled, step }], canUndo, canRedo, summary, needsPerson: NeedsPerson[], rowCount, columns }`
+- `CleanState`: `{ steps: [{ name, enabled, step }], canUndo, canRedo, summary, needsPerson: NeedsPerson[], rowCount, columns, blocked }`
+  `blocked` is null, or `{ report, message }` when the saved steps cannot run on this file. The interface then shows
+  the message; saving and typing fixes are refused until the steps are changed.
   `needsPerson` holds at most 500 entries; `summary` has the full counts.
 
 ## Rules

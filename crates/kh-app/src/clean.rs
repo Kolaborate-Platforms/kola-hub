@@ -9,6 +9,7 @@ use kh_clean::{
 };
 use kh_core::Table;
 use kh_formats::{CsvError, CsvLimits, read_csv, sniff_delimiter};
+use kh_store::clean_steps::MAX_STEPS_BYTES;
 use kh_store::{FileId, Project, ProjectId, SavedFile};
 use serde::Serialize;
 
@@ -23,7 +24,11 @@ pub const MAX_NEEDS_PERSON: usize = 500;
 pub const MAX_SPELLING_GROUPS: usize = 200;
 /// Longest value a person may type into one cell, matching the reader's cell limit.
 pub const MAX_CELL_BYTES: usize = 1 << 20;
+/// Most steps one file may have.
+pub const MAX_STEPS: usize = 200;
 const SNIFF_BYTES: usize = 8192;
+/// Label under which a saved step list that cannot be read is kept before anything replaces it.
+const UNREADABLE_LABEL: &str = "unreadable-clean-steps";
 const SAVE_LABEL: &str = "cleaned";
 
 /// A change the person typed into one cell, applied after the steps.
@@ -248,6 +253,11 @@ impl Session {
             self.steps = before;
             return Err(AppError::new("bad-step", "There is no such step."));
         }
+        // Checked before the replay, which is where a huge step would cost time and memory.
+        if let Err(error) = within_limits(&self.steps) {
+            self.steps = before;
+            return Err(error);
+        }
         let fixes = mem::take(&mut self.fixes);
         self.view = View::Source;
         self.profile = None;
@@ -316,6 +326,20 @@ impl Session {
     }
 }
 
+fn too_many_steps() -> AppError {
+    AppError::new(
+        "steps-too-large",
+        "This list of steps is too long. Nothing was changed.",
+    )
+}
+
+fn within_limits(steps: &StepList) -> AppResult<()> {
+    if steps.steps.len() > MAX_STEPS || steps.to_json().len() > MAX_STEPS_BYTES {
+        return Err(too_many_steps());
+    }
+    Ok(())
+}
+
 /// Opens a file in Clean and loads its saved steps.
 pub fn clean_open(shell: &Shell, project: &ProjectId, file: &FileId) -> AppResult<CleanSession> {
     let project = shell.project(project)?;
@@ -325,7 +349,11 @@ pub fn clean_open(shell: &Shell, project: &ProjectId, file: &FileId) -> AppResul
         None => StepList::new(),
         Some(text) => match StepList::from_json(&text) {
             Ok(list) => list,
-            Err(StepListError::Unreadable(_)) => StepList::new(),
+            Err(StepListError::Unreadable(_)) => {
+                // The next change writes over the saved text, so a copy is kept first.
+                project.store_blob(file, UNREADABLE_LABEL, text.as_bytes())?;
+                StepList::new()
+            }
             Err(e) => return Err(steps_failure(&e)),
         },
     };
@@ -400,6 +428,9 @@ pub fn clean_preview(
     start: usize,
     count: usize,
 ) -> AppResult<Preview> {
+    let mut alone = StepList::new();
+    alone.push(step.clone());
+    within_limits(&alone)?;
     with_session(shell, id, |s| {
         kh_clean::preview(&s.source, &s.steps, step, start, count.min(MAX_WINDOW_ROWS))
             .map_err(|e| AppError::new("step-failed", format!("The step cannot run: {e}.")))
