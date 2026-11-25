@@ -60,7 +60,10 @@ deny = [
   { crate = "openssl", wrappers = ["kh-update"] },
   { crate = "native-tls", wrappers = ["kh-update"] },
   # Only the shell may know about the window toolkit, so it stays replaceable.
-  { crate = "tauri", wrappers = ["kh-app"] },
+  # The dialog plugin (and the file plugin it brings) are used by the shell alone, from Rust.
+  { crate = "tauri", wrappers = ["kh-app", "tauri-plugin-dialog", "tauri-plugin-fs"] },
+  { crate = "tauri-plugin-dialog", wrappers = ["kh-app"] },
+  { crate = "tauri-plugin-fs", wrappers = ["tauri-plugin-dialog"] },
   # Updates belong to kh-update. This plugin would put an HTTP client in the shell.
   { crate = "tauri-plugin-updater" },
   # Telemetry and crash upload are never allowed anywhere.

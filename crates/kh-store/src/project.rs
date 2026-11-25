@@ -20,7 +20,8 @@ const QUICK_CHECK_OK: &str = "ok";
 const BUSY_TIMEOUT_MS: u32 = 5_000;
 
 /// Each entry moves the database one version forward. Never edit an old entry, add a new one.
-const MIGRATIONS: &[&str] = &["CREATE TABLE files (
+const MIGRATIONS: &[&str] = &[
+    "CREATE TABLE files (
         id TEXT PRIMARY KEY,
         rel_path TEXT NOT NULL UNIQUE,
         added_at INTEGER NOT NULL
@@ -31,7 +32,13 @@ const MIGRATIONS: &[&str] = &["CREATE TABLE files (
         label TEXT NOT NULL,
         created_at INTEGER NOT NULL,
         PRIMARY KEY (owner, blob, label)
-    );"];
+    );",
+    "CREATE TABLE clean_steps (
+        file_id TEXT PRIMARY KEY,
+        steps TEXT NOT NULL,
+        updated_at INTEGER NOT NULL
+    );",
+];
 
 /// The newest database version this build understands.
 pub const SCHEMA_VERSION: u32 = MIGRATIONS.len() as u32;
