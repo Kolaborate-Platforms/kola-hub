@@ -56,4 +56,4 @@ reader on the same machine and files. Peak memory is `maximum resident set size`
 | `wide1m.csv` (182 MB) | 0.27 to 0.29 s | 0.27 to 0.28 s | 245 MB | 244 to 246 MB |
 
 The limits cost nothing measurable. Peak memory is higher here than in the container run for both versions.
-New default limits: 8 MiB per record and 1 GiB of table data (cell text plus 4 bytes per cell).
+New default limits: 8 MiB per record and 1 GiB of cell memory as the table counts it.

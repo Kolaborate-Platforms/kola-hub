@@ -17,7 +17,7 @@ pub struct CsvLimits {
     pub max_columns: usize,
     /// Most bytes one record (one row, even if quoted cells run over several lines) may take in the file.
     pub max_record_bytes: usize,
-    /// Most bytes the whole table may hold: cell text plus a few bytes for every cell, empty ones too.
+    /// Most bytes the table's cells may take in memory.
     pub max_total_bytes: usize,
 }
 
@@ -246,8 +246,6 @@ impl<R: Read> Read for RecordCap<R> {
 }
 
 const READ_BUFFER: usize = 256 * 1024;
-/// What the table spends on one cell before its text: a dictionary code or an offset.
-const CELL_OVERHEAD_BYTES: usize = 4;
 
 /// Reads a CSV from `source`, one record at a time, into a [`Table`].
 ///
@@ -263,9 +261,9 @@ pub fn read_csv<R: Read>(
         until: Rc::clone(&until),
         tripped: Rc::new(Cell::new(false)),
         utf16: Rc::new(Cell::new(false)),
-        allowance: (limits.max_record_bytes as u64).saturating_add(READ_BUFFER as u64),
+        max_record: limits.max_record_bytes as u64,
     };
-    guard.until.set(guard.allowance);
+    guard.until.set(guard.allowance());
     let source = RecordCap {
         inner: source,
         served: 0,
@@ -298,7 +296,6 @@ pub fn read_csv<R: Read>(
 
     let mut cells: Vec<String> = vec![String::new(); width];
     let mut row_no = 1usize;
-    let mut total_bytes = 0usize;
     while read_record(&mut reader, &mut record, &guard, row_no + 1)? {
         row_no += 1;
         if limits
@@ -307,13 +304,6 @@ pub fn read_csv<R: Read>(
         {
             report.stopped_early = true;
             break;
-        }
-        let row_bytes = record.as_slice().len() + width * CELL_OVERHEAD_BYTES;
-        total_bytes = total_bytes.saturating_add(row_bytes);
-        if total_bytes > limits.max_total_bytes {
-            return Err(CsvError::TooMuchData {
-                limit: limits.max_total_bytes,
-            });
         }
         if record.len() > width {
             return Err(CsvError::TooManyCells {
@@ -341,6 +331,11 @@ pub fn read_csv<R: Read>(
             }
         }
         builder.push_row(&cells)?;
+        if builder.used_bytes() > limits.max_total_bytes {
+            return Err(CsvError::TooMuchData {
+                limit: limits.max_total_bytes,
+            });
+        }
     }
     Ok((builder.finish(), report))
 }
@@ -349,7 +344,14 @@ struct Guard {
     until: Rc<Cell<u64>>,
     tripped: Rc<Cell<bool>>,
     utf16: Rc<Cell<bool>>,
-    allowance: u64,
+    max_record: u64,
+}
+
+impl Guard {
+    /// The reader fills its buffer ahead of the record it is splitting.
+    fn allowance(&self) -> u64 {
+        self.max_record.saturating_add(READ_BUFFER as u64)
+    }
 }
 
 fn read_record<R: Read>(
@@ -358,18 +360,22 @@ fn read_record<R: Read>(
     guard: &Guard,
     row: usize,
 ) -> Result<bool, CsvError> {
-    guard
-        .until
-        .set(reader.position().byte().saturating_add(guard.allowance));
+    let start = reader.position().byte();
+    guard.until.set(start.saturating_add(guard.allowance()));
     let result = reader.read_byte_record(record);
     if guard.utf16.get() {
         return Err(CsvError::NotUtf8);
     }
-    result.map_err(|e| match e.into_kind() {
+    let found = result.map_err(|e| match e.into_kind() {
         csv::ErrorKind::Io(_) if guard.tripped.get() => CsvError::RecordTooLong { row },
         csv::ErrorKind::Io(io) => CsvError::Io(io),
         _ => CsvError::Malformed("the rows could not be split into cells".to_owned()),
-    })
+    })?;
+    // The read ahead lets a record run a little past the cap before the wrapper stops it.
+    if reader.position().byte() - start > guard.max_record {
+        return Err(CsvError::RecordTooLong { row });
+    }
+    Ok(found)
 }
 
 fn lossy(field: &[u8], report: &mut CsvReport) -> String {
@@ -585,5 +591,24 @@ mod tests {
         let source = Drip(vec![b"a".to_vec(), b"\n".to_vec(), vec![0xFF, 0xFE, b'\n']]);
         let (_, report) = read_csv(source, b',', &CsvLimits::default()).unwrap();
         assert!(report.replaced_bad_bytes);
+    }
+
+    #[test]
+    fn dictionary_entries_count_against_the_total_limit() {
+        // 100 different 20 byte values: 2,400 bytes as text and codes, far more once held twice.
+        let limits = CsvLimits {
+            max_total_bytes: 4000,
+            ..CsvLimits::default()
+        };
+        let rows: String = (0..100).map(|i| format!("{i:020}\n")).collect();
+        let err = read_csv(format!("a\n{rows}").as_bytes(), b',', &limits).unwrap_err();
+        assert!(matches!(err, CsvError::TooMuchData { limit: 4000 }));
+    }
+
+    #[test]
+    fn a_row_just_over_the_cap_is_refused() {
+        let cell = "y".repeat(1100);
+        let err = read_csv(format!("a\n{cell}\n").as_bytes(), b',', &tight()).unwrap_err();
+        assert!(matches!(err, CsvError::RecordTooLong { row: 2 }));
     }
 }

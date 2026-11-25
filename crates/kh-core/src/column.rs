@@ -8,6 +8,13 @@ const MAX_DICT_ENTRIES: usize = 4_096;
 /// Values longer than this never go in a dictionary. A dictionary keeps each value twice, so long
 /// values would cost double.
 const MAX_DICT_VALUE_BYTES: usize = 128;
+/// What one stored dictionary value costs beyond its text.
+const DICT_ENTRY_OVERHEAD_BYTES: usize = 16;
+
+/// Each value is held twice, in the list and in the lookup map.
+fn dictionary_bytes(values: usize, text_bytes: usize) -> usize {
+    2 * (text_bytes + values * DICT_ENTRY_OVERHEAD_BYTES)
+}
 
 /// Which storage shape a column currently uses.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -82,8 +89,8 @@ impl Column {
     pub fn heap_bytes(&self) -> usize {
         match self {
             Column::Dictionary { values, codes } => {
-                // Each value is held twice (list and lookup map).
-                codes.capacity() * 4 + values.iter().map(|v| 2 * (v.len() + 16)).sum::<usize>()
+                let text = values.iter().map(|v| v.len()).sum();
+                codes.capacity() * 4 + dictionary_bytes(values.len(), text)
             }
             Column::Plain { bytes, offsets } => bytes.capacity() + offsets.capacity() * 4,
         }
@@ -102,6 +109,7 @@ enum State {
         values: Vec<Box<str>>,
         lookup: HashMap<Box<str>, u32>,
         codes: Vec<u32>,
+        text_bytes: usize,
     },
     Plain {
         bytes: Vec<u8>,
@@ -120,6 +128,7 @@ impl ColumnBuilder {
                 values: Vec::new(),
                 lookup: HashMap::new(),
                 codes: Vec::new(),
+                text_bytes: 0,
             },
         }
     }
@@ -129,6 +138,7 @@ impl ColumnBuilder {
             values,
             lookup,
             codes,
+            text_bytes,
         } = &mut self.state
         {
             if let Some(&code) = lookup.get(cell) {
@@ -139,6 +149,7 @@ impl ColumnBuilder {
                 let code = values.len() as u32;
                 let value: Box<str> = cell.into();
                 lookup.insert(value.clone(), code);
+                *text_bytes += cell.len();
                 values.push(value);
                 codes.push(code);
                 return Ok(());
@@ -155,6 +166,19 @@ impl ColumnBuilder {
             offsets.push(end);
         }
         Ok(())
+    }
+
+    /// Bytes the cells hold so far, counted without walking them.
+    pub(crate) fn used_bytes(&self) -> usize {
+        match &self.state {
+            State::Dict {
+                values,
+                codes,
+                text_bytes,
+                ..
+            } => codes.len() * 4 + dictionary_bytes(values.len(), *text_bytes),
+            State::Plain { bytes, offsets } => bytes.len() + offsets.len() * 4,
+        }
     }
 
     /// Rewrites a full dictionary as plain text.

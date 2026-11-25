@@ -118,6 +118,7 @@ pub struct TableBuilder {
     names: Vec<String>,
     columns: Vec<ColumnBuilder>,
     rows: usize,
+    used_bytes: usize,
     broken: Option<TableError>,
 }
 
@@ -131,6 +132,7 @@ impl TableBuilder {
             names: names.iter().map(|n| n.as_ref().to_owned()).collect(),
             columns: names.iter().map(|_| ColumnBuilder::new()).collect(),
             rows: 0,
+            used_bytes: 0,
             broken: None,
         })
     }
@@ -150,14 +152,22 @@ impl TableBuilder {
             });
         }
         for (i, (builder, cell)) in self.columns.iter_mut().zip(cells).enumerate() {
+            let before = builder.used_bytes();
             if let Err(ColumnFull) = builder.push(cell.as_ref()) {
                 let e = TableError::ColumnFull { column: i };
                 self.broken = Some(e.clone());
                 return Err(e);
             }
+            // A column that leaves its dictionary can grow or shrink a lot in one push.
+            self.used_bytes = (self.used_bytes + builder.used_bytes()).saturating_sub(before);
         }
         self.rows += 1;
         Ok(())
+    }
+
+    /// Bytes the cells added so far take in memory, for callers that enforce a limit.
+    pub fn used_bytes(&self) -> usize {
+        self.used_bytes
     }
 
     /// Rows added so far.
