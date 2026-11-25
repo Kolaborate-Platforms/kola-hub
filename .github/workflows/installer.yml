@@ -1,0 +1,50 @@
+name: Installer
+
+# Task 9. Builds the Windows installer, checks its size and smoke tests it.
+# This runner has internet and WebView2, so it cannot prove the offline Windows 10 install.
+# That stays the manual plan in docs/benchmarks/WEBVIEW2.md.
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+  pull_request:
+    paths:
+      - "crates/kh-app/**"
+      - "scripts/smoke-windows.ps1"
+      - ".github/workflows/installer.yml"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.97.0"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: Swatinem/rust-cache@v2
+      - name: Build installer
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm tauri build
+      - name: Test file
+        run: cargo run --release -p kh-formats --example gen_big_csv -- 100000 100k.csv
+      - name: Install, run, measure, uninstall
+        shell: powershell
+        run: ./scripts/smoke-windows.ps1 -InstallerDir target/release/bundle/nsis -Csv 100k.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kola-hub-windows
+          path: |
+            target/release/bundle/nsis/*.exe
+            target/release/bundle/nsis/SHA256SUMS
