@@ -240,6 +240,23 @@ export function createVirtualGrid(opts: VirtualGridOptions): VirtualGridHandle {
     rowsEl.appendChild(frag);
   };
 
+  // Runs once the first preview rows exist. Before that the grid is no wider than its window,
+  // so a sideways scroll would be ignored.
+  let targetShown = false;
+  const showTargetColumn = (): void => {
+    if (targetShown || previewTargets.size === 0) return;
+    targetShown = true;
+    requestAnimationFrame(() => {
+      if (destroyed) return;
+      const colLeft = columnLeftOffset(Math.min(...previewTargets), previewTargets);
+      const colRight = colLeft + PREVIEW_COL_WIDTH;
+      const left = viewportEl.scrollLeft;
+      if (colRight <= left + viewportEl.clientWidth && colLeft >= left) return;
+      viewportEl.scrollLeft = Math.max(0, colLeft - SCROLL_MARGIN);
+      headerEl.scrollLeft = viewportEl.scrollLeft;
+    });
+  };
+
   const renderVisible = async (): Promise<void> => {
     if (destroyed) return;
     const { first, last } = visibleRange();
@@ -260,6 +277,7 @@ export function createVirtualGrid(opts: VirtualGridOptions): VirtualGridHandle {
         prevCache = { start, data };
       }
       drawPreview(first, last);
+      showTargetColumn();
       return;
     }
     const hit =
@@ -281,20 +299,6 @@ export function createVirtualGrid(opts: VirtualGridOptions): VirtualGridHandle {
 
   viewportEl.addEventListener("scroll", onScroll);
   void renderVisible();
-
-  if (previewTargets.size > 0) {
-    const firstTarget = Math.min(...previewTargets);
-    requestAnimationFrame(() => {
-      if (destroyed) return;
-      const colLeft = columnLeftOffset(firstTarget, previewTargets);
-      const colRight = colLeft + PREVIEW_COL_WIDTH;
-      const viewWidth = viewportEl.clientWidth;
-      if (viewWidth > 0 && (colRight > viewportEl.scrollLeft + viewWidth || colLeft < viewportEl.scrollLeft)) {
-        viewportEl.scrollLeft = Math.max(0, colLeft - SCROLL_MARGIN);
-        headerEl.scrollLeft = viewportEl.scrollLeft;
-      }
-    });
-  }
 
   return {
     element: wrap,
