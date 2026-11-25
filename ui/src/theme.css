@@ -1,0 +1,56 @@
+:root {
+  /* Brand tokens (spec 8) */
+  --kh-primary: #35b544;
+  --kh-secondary: #e1f4e4;
+  --kh-tertiary: #2a8a34;
+  --kh-grey: #424242;
+  --kh-yellow: #fbdf64;
+
+  /* Design palette */
+  --color-rail-bg: #1a521f;
+  --color-rail-muted: #c4e9cb;
+  --color-rail-hover: rgba(255, 255, 255, 0.08);
+  --color-rail-card: rgba(255, 255, 255, 0.12);
+  --color-rail-active: rgba(255, 255, 255, 0.2);
+
+  --color-accent: #3ccf4e;
+  --color-green-dark: #1a521f;
+  --color-green-tint: #f1faf3;
+  --color-green-border: #c4e9cb;
+  --color-fixed-bg: #d7f5dc;
+  --color-fixed-text: #14532d;
+
+  --color-ink: #111827;
+  --color-body: #374151;
+  --color-muted: #4b5563;
+  --color-icon-muted: #6b7280;
+  --color-dashed: #9ca3af;
+  --color-border-strong: #d1d5db;
+  --color-border: #e5e7eb;
+  --color-surface-alt: #f3f4f6;
+  --color-bg: #f9fafb;
+  --color-white: #ffffff;
+
+  --color-amber-bg: #fffbeb;
+  --color-amber-border: #fde68a;
+  --color-amber-text: #78350f;
+
+  --color-blue-bg: #dbeafe;
+  --color-blue-text: #1e3a8a;
+
+  --color-red-bg: #fee2e2;
+  --color-red-text: #991b1b;
+
+  --color-teal-bg: #e6f2f2;
+  --color-teal-border: #a1e3d8;
+  --color-teal-text: #005555;
+
+  /* Typography & layout */
+  --font-sans: Poppins, "Segoe UI", sans-serif;
+  --rail-width: 232px;
+  --topbar-height: 60px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 9999px;
+}
