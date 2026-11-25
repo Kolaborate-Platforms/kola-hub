@@ -208,6 +208,8 @@ pub struct Settings {
     pub trash_retention_days: u32,
     /// Optional name shown by the labeller.
     pub labeller_name: Option<String>,
+    /// Whether AI tools may use the opened projects through the local server. Off until the person says so.
+    pub ai_access: bool,
 }
 
 impl Default for Settings {
@@ -218,6 +220,7 @@ impl Default for Settings {
             storage_limit: 5 * 1024 * 1024 * 1024,
             trash_retention_days: 30,
             labeller_name: None,
+            ai_access: false,
         }
     }
 }

@@ -27,7 +27,8 @@ real job without help, on the machines our users actually own.
 - No telemetry, analytics, crash upload or "phone home" of any kind. The only network call in the whole
   product is an optional update check (section 9).
 - No phone or tablet app. Deep data work is desktop work.
-- No AI model features in version 1.
+- No AI model inside the app in version 1. A local server lets an AI tool the person already uses work with the
+  tools (decision 11). It is off until the person turns it on, and it uses no network.
 - No plugin system in version 1.
 
 ---
@@ -50,6 +51,7 @@ disproves it. **Open** means it does not block the build.
 | 8 | Design | Locked | The desktop canvas is built (section 13). Boards 1 to 21 are the target. Boards 22 onward are web drafts for later tools |
 | 9 | Focus: offline behaviour, install size and performance on low-end machines, above feature count | Locked | Enforced by budgets in section 4 and CI gates in section 11 |
 | 10 | Windows 10 and 11 first, 64-bit. macOS and Linux follow from the same code | Locked | |
+| 11 | A local MCP server (`kola-hub-mcp`) so AI tools can use Kola Hub's tools | Locked | Added by the maintainer on 25 November 2026. Standard input and output only, off by default, only projects already opened in the app, no permanent delete, no backup or passphrases. See `docs/contracts/mcp.md` |
 
 ---
 

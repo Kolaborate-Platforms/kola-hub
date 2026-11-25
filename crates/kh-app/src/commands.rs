@@ -7,12 +7,11 @@ use kh_settings::Settings;
 use kh_store::{FileId, ProjectId, RecentProject, SavedFile, TrashId, TrashItem};
 use tauri::{AppHandle, Emitter, State};
 
-use crate::backup::{self, CreateReportView, ProgressView, RestoreReportView, TestReportView};
-use crate::clean::{self, CleanSession, CleanState, ReuseResult, WindowView};
 use crate::dialogs::{self, Pick};
-use crate::error::{AppError, AppResult};
-use crate::projects::{self, AppInfo, FileRow, ProjectView};
-use crate::shell::Shell;
+use kh_service::backup::{self, CreateReportView, ProgressView, RestoreReportView, TestReportView};
+use kh_service::clean::{self, CleanSession, CleanState, ReuseResult, WindowView};
+use kh_service::projects::{self, AppInfo, FileRow, ProjectView};
+use kh_service::{AppError, AppResult, Shell};
 
 type Shared<'a> = State<'a, Arc<Shell>>;
 

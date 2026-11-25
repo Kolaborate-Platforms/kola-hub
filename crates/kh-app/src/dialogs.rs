@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use tauri::AppHandle;
 use tauri_plugin_dialog::{DialogExt, FilePath};
 
-use crate::error::{AppError, AppResult};
+use kh_service::{AppError, AppResult};
 
 const BACKUP_FILTER_NAME: &str = "Kola Hub backup";
 const BACKUP_EXTENSION: &str = "khbackup";

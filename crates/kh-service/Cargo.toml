@@ -1,0 +1,24 @@
+[package]
+name = "kh-service"
+description = "What every tool can be asked to do, with no window. The shell and the AI server both call this."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+kh-backup = { path = "../kh-backup" }
+kh-clean = { path = "../kh-clean" }
+kh-core = { path = "../kh-core" }
+kh-formats = { path = "../kh-formats" }
+kh-settings = { path = "../kh-settings" }
+kh-store = { path = "../kh-store" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tempfile = "3"

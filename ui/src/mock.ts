@@ -46,6 +46,7 @@ let settings: Settings = {
   storageLimit: 5 * GB,
   trashRetentionDays: 30,
   labellerName: null,
+  aiAccess: false,
 };
 
 const recentProjects: RecentProject[] = [

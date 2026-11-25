@@ -133,6 +133,7 @@ export function renderSettingsScreen(): { header: HTMLElement; body: HTMLElement
       const next = {
         language: langSelect.value,
         checkForUpdates: state.settings.checkForUpdates,
+        aiAccess: state.settings.aiAccess,
         storageLimit: Number(limitSelect.value),
         trashRetentionDays: Number(retentionSelect.value),
         labellerName: labeller.length > 0 ? labeller : null,

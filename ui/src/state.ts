@@ -41,6 +41,7 @@ export const state: AppState = {
     storageLimit: DEFAULT_LIMIT,
     trashRetentionDays: 30,
     labellerName: null,
+    aiAccess: false,
   },
   recentProjects: [],
   activeProject: null,

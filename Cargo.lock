@@ -1950,10 +1950,10 @@ version = "0.0.0"
 name = "kh-app"
 version = "0.0.0"
 dependencies = [
- "kh-backup",
  "kh-clean",
  "kh-core",
  "kh-formats",
+ "kh-service",
  "kh-settings",
  "kh-store",
  "serde",
@@ -1961,7 +1961,6 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tauri-plugin-dialog",
- "tempfile",
 ]
 
 [[package]]
@@ -2000,6 +1999,21 @@ dependencies = [
  "csv",
  "kh-core",
  "proptest",
+ "tempfile",
+]
+
+[[package]]
+name = "kh-service"
+version = "0.0.0"
+dependencies = [
+ "kh-backup",
+ "kh-clean",
+ "kh-core",
+ "kh-formats",
+ "kh-settings",
+ "kh-store",
+ "serde",
+ "serde_json",
  "tempfile",
 ]
 

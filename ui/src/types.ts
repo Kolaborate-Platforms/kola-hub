@@ -14,6 +14,7 @@ export interface Settings {
   storageLimit: number;
   trashRetentionDays: number;
   labellerName: string | null;
+  aiAccess: boolean;
 }
 
 export interface RecentProject {

@@ -2,24 +2,16 @@
 
 #![forbid(unsafe_code)]
 
-mod backup;
 mod bench;
-mod clean;
 mod commands;
-#[cfg(test)]
-mod contract_tests;
 mod dialogs;
-mod error;
-mod projects;
-mod shell;
 
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 
 use tauri::Manager;
 
-pub use error::AppError;
-pub use shell::Shell;
+use kh_service::Shell;
 
 use bench::{BenchState, append_bench_line, load_table, non_empty_env_path};
 

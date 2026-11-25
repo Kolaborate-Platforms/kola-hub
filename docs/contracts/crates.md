@@ -4,6 +4,12 @@ The shell (`kh-app`) only forwards calls. Every crate below builds and tests wit
 reach the interface derive `serde::Serialize` or `Deserialize`, use `camelCase`, and **never contain a file path**.
 They carry opaque ids and display names. Errors reach the interface as a stable code plus a plain English message.
 
+## kh-service (spec 5.1)
+
+Every tool action as a plain function over the crates below: projects, files, recently deleted, settings,
+backup and Clean sessions. `kh-app` (the window) and `kh-mcp` (the AI server) only forward to it. It has no window
+code and returns no file paths.
+
 ## kh-store (spec 6)
 
 - `Project`: open or create the hidden `.kola-hub/` folder (`project.sqlite` with `PRAGMA user_version`,

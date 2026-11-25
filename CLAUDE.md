@@ -29,7 +29,8 @@ and little or no internet. Size, start-up time, memory and offline behaviour mat
   Agent HQ or hq-suite may be copied only with an entry in `docs/PROVENANCE.md` showing his sign-off. Code from
   storytold/craft-libs only after the check described in spec section 11.3.
 - **Do not add scope.** Two tools until the pilot gate passes. If a task seems to need an account, a server,
-  sync, sharing or AI, stop and ask the maintainer.
+  sync, sharing or AI, stop and ask the maintainer. The one approved exception is the local MCP server over standard input
+  and output (spec decision 11, `docs/contracts/mcp.md`).
 - No secrets, real names, personal paths or real hostnames in code, tests or fixtures. Invent test data.
 
 ## Disk space (important)
