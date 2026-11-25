@@ -52,6 +52,9 @@ Each new dependency needs a reason, a licence check and a size check in its PR. 
 | `csv` | 1.x | Unlicense OR MIT | Streaming CSV reader | Not measured yet |
 | `tempfile` | 3.x | MIT OR Apache-2.0 | Tests only | Not shipped |
 | `proptest` | 1.x | MIT OR Apache-2.0 | Fuzz style tests only | Not shipped |
+| `rusqlite` (feature `bundled`, brings `libsqlite3-sys` and SQLite) | 0.41 | MIT (SQLite is public domain) | The project database in `kh-store`: WAL, `synchronous=FULL`, `user_version` migrations. `bundled` so nothing needs installing on the laptop | Not measured yet |
+| `sha2` | 0.11 | MIT OR Apache-2.0 | SHA-256 for the content store, so stored content is checked on read | Not measured yet |
+| `serde` and `serde_json` | 1.x | MIT OR Apache-2.0 | Trash journal entries, the recent projects list, and the serialisable types that reach the interface | Not measured yet |
 
 ## Bundled assets
 
