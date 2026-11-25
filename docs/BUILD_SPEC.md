@@ -41,7 +41,7 @@ disproves it. **Open** means it does not block the build.
 | # | Decision | Status | Notes |
 |---|----------|--------|-------|
 | 1 | First tools: Clean, then Annotate. Annotate starts with text records, then images (boxes first, shapes later) | Locked | Sheets, Docs, Slides, Dashboards wait for the pilot gate |
-| 2 | Shell: Tauri with a TypeScript front end over a GUI-free Rust core | **Gate** | Phase 0 measures it against a native egui build on the slowest laptop. If Tauri misses the budgets in section 4, switch to egui. See 5.4 |
+| 2 | Shell: Tauri with a TypeScript front end over a GUI-free Rust core | Locked | Chosen by the maintainer on 25 November 2026 after the Phase 0 spike (`docs/benchmarks/SHELL_SPIKE.md`). Windows measurements are still to be taken. See 5.4 |
 | 3 | One app, tools as modules, each tool its own crate so any can leave later | Locked | One installer, one signature, one update path |
 | 4 | Open source, Apache-2.0, public repo | Locked | See 11.3 for reuse and provenance rules |
 | 5 | Name Kola Hub, repo `kola-hub` | Locked | |
@@ -78,7 +78,7 @@ the maintainer signs off the final budgets. After that, CI fails a PR that break
 
 | Area | Budget |
 |------|--------|
-| Installer size (Windows, no bundled WebView2) | 25 MB or less |
+| Installer size (Windows, offline installer with WebView2 inside) | 155 MB or less: 25 MB for the app plus about 127 MB for WebView2, accepted by the maintainer on 25 November 2026 |
 | Installed size, all phase 1 and 2 tools | 60 MB or less |
 | Cold start to usable home screen, reference machine | 2 s or less |
 | Idle memory with home screen open | 150 MB or less |

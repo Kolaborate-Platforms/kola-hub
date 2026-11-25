@@ -1,6 +1,6 @@
 # Shell spike: Tauri or egui (spec 5.4)
 
-Date: 25 November 2026. Status: **not signed**. The tests that decide it have not been run.
+Date: 25 November 2026. Status: **Tauri chosen**. The Windows tests have not been run.
 
 **None of these are reference-machine numbers.** They come from a developer Mac (Apple M4 Pro, 12 cores, 24 GB,
 macOS, release builds). The target is a 2 core Windows 10 laptop with 4 GB RAM and a spinning disk.
@@ -84,29 +84,26 @@ Both demos opened 1,000,000 rows and finished the scripted scroll. This does not
 that size. Tauri relies on a 24 million pixel tall element, near what browser engines allow, and egui's scroll
 position loses precision at that height. Either way the real grid will need its own scroll mapping.
 
-## Provisional recommendation: egui
+## Decision: Tauri
 
-The decision rule in spec 5.4: Tauri wins only if it meets every budget **and** installs offline without a huge
-bundle. Otherwise egui wins.
+Tauri was chosen on 25 November 2026. The offline installer
+carries the WebView2 installer, so the installer budget in spec section 4 was changed to match. The egui demo was
+removed; it is in the git history.
 
-- On a machine without WebView2, the offline Tauri installer adds about 127 MB according to Tauri's documentation
-  (not measured by us), against a 25 MB budget.
-- Speed and program size do not separate the two on this Mac.
+The lead's provisional view before the decision was egui, because of the installer size against the old 25 MB
+budget. That size is now accepted. The Windows tests below still have to be run, now to check Tauri against the
+budgets.
 
-So egui leads, unless the clean Windows 10 test shows that the target machines reliably have WebView2, or egui
-fails to draw on the reference laptop. Test those two things first. egui also costs more design work to match the
-boards, and its text input and screen reader support should be checked before signing.
+## Still to do on Windows
 
-## What the maintainer needs to do
-
-1. Fix GitHub Actions for the organisation, or build both demos on a Windows machine.
-2. On the reference laptop, run `scripts/measure-shell.ps1 -Exe <demo.exe> -Csv 100k.csv` for each demo. The script
-   has never been run, so expect to fix it.
-3. Follow the test plan in `WEBVIEW2.md` on a clean Windows 10 machine. Start egui there too.
-4. Decide on the licence questions above.
-5. Sign the shell decision and the budgets.
+1. Fix the GitHub billing lock, or build on a Windows machine.
+2. On the reference laptop, run `scripts/measure-shell.ps1 -Exe <app.exe> -Csv 100k.csv`. The script has never
+   been run, so expect to fix it.
+3. Follow the test plan in `WEBVIEW2.md` on a clean Windows 10 machine with the offline installer.
+4. Sign the remaining budgets.
 
 | Decision | Signed by | Date |
 |----------|-----------|------|
-| Shell | | |
-| Budgets (spec section 4) | | |
+| Shell: Tauri, with the offline WebView2 installer | the maintainer | 25 November 2026 |
+| Installer size budget changed to include WebView2 | the maintainer | 25 November 2026 |
+| Other budgets (spec section 4) | not signed | |

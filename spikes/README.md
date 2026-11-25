@@ -2,7 +2,7 @@
 
 Throwaway demos. The losing one is deleted once the maintainer signs the shell decision.
 
-- `tauri-grid/` and `egui-grid/`. Each is its own Cargo workspace (`[workspace]` in its manifest), so the
+- `tauri-grid/` (the egui demo was removed after Tauri was chosen). It is its own Cargo workspace (`[workspace]` in its manifest), so the
   main workspace, its CI and its `deny.toml` never see these dependencies.
 - Both use `kh-core` and `kh-formats` by path. Neither reimplements CSV reading or the table.
 
