@@ -1,3 +1,5 @@
+//! The window shell: forwards commands from the interface to the Rust crates.
+
 #![forbid(unsafe_code)]
 
 use std::fs::{File, OpenOptions};
@@ -200,6 +202,7 @@ fn non_empty_env_path(key: &str) -> Option<PathBuf> {
         .map(PathBuf::from)
 }
 
+/// Opens the window and runs until it closes. `started_at` is when `main` began, for bench mode.
 pub fn run(started_at: Instant) {
     let bench_out = non_empty_env_path("KH_BENCH_OUT");
     let csv_result = match non_empty_env_path("KH_CSV") {
