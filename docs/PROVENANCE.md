@@ -49,7 +49,9 @@ Each new dependency needs a reason, a licence check and a size check in its PR. 
 
 | Crate | Version | Licence | Why | Size cost |
 |-------|---------|---------|-----|-----------|
-|       |         |         |     |           |
+| `csv` | 1.x | Unlicense OR MIT | Streaming CSV reader | Not measured yet |
+| `tempfile` | 3.x | MIT OR Apache-2.0 | Tests only | Not shipped |
+| `proptest` | 1.x | MIT OR Apache-2.0 | Fuzz style tests only | Not shipped |
 
 ## Bundled assets
 

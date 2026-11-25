@@ -44,3 +44,16 @@ Window access (100 rows at 2,000 positions across the table): slowest single win
   app, show the first screen from a quick prefix read, then finish the full read on a worker thread.
 - Peak memory is read from `/proc/self/status`, so it is only reported on Linux. A Windows equivalent
   (`GetProcessMemoryInfo`) is needed for the reference machine run.
+
+## Developer Mac, after the reader limits were added
+
+Apple M4 Pro, 12 cores, 24 GB, macOS, release build. **Also not the reference machine.** Three runs each, old and new
+reader on the same machine and files. Peak memory is `maximum resident set size` from `/usr/bin/time -l`.
+
+| File | Whole file, before | Whole file, after | Peak memory, before | Peak memory, after |
+|------|--------------------|-------------------|---------------------|--------------------|
+| `1m.csv` (63 MB) | 0.19 to 0.21 s | 0.20 s | 95 to 102 MB | 95 to 100 MB |
+| `wide1m.csv` (182 MB) | 0.27 to 0.29 s | 0.27 to 0.28 s | 245 MB | 244 to 246 MB |
+
+The limits cost nothing measurable. Peak memory is higher here than in the container run for both versions.
+New default limits: 8 MiB per record and 1 GiB of table data (cell text plus 4 bytes per cell).

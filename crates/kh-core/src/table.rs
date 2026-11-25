@@ -94,7 +94,11 @@ impl Table {
             .map(|r| {
                 self.columns
                     .iter()
-                    .map(|c| c.get(r).unwrap_or("").to_owned())
+                    .map(|c| {
+                        let cell = c.get(r);
+                        debug_assert!(cell.is_some(), "column shorter than the table");
+                        cell.unwrap_or("").to_owned()
+                    })
                     .collect()
             })
             .collect();
@@ -114,6 +118,7 @@ pub struct TableBuilder {
     names: Vec<String>,
     columns: Vec<ColumnBuilder>,
     rows: usize,
+    broken: Option<TableError>,
 }
 
 impl TableBuilder {
@@ -126,11 +131,18 @@ impl TableBuilder {
             names: names.iter().map(|n| n.as_ref().to_owned()).collect(),
             columns: names.iter().map(|_| ColumnBuilder::new()).collect(),
             rows: 0,
+            broken: None,
         })
     }
 
     /// Adds one row. It must have exactly one cell per column.
+    ///
+    /// A [`TableError::ColumnFull`] error can leave some columns one cell ahead, so the builder then
+    /// refuses every later row with the same error. Drop it and start again.
     pub fn push_row<S: AsRef<str>>(&mut self, cells: &[S]) -> Result<(), TableError> {
+        if let Some(e) = &self.broken {
+            return Err(e.clone());
+        }
         if cells.len() != self.columns.len() {
             return Err(TableError::WrongCellCount {
                 expected: self.columns.len(),
@@ -138,9 +150,11 @@ impl TableBuilder {
             });
         }
         for (i, (builder, cell)) in self.columns.iter_mut().zip(cells).enumerate() {
-            builder
-                .push(cell.as_ref())
-                .map_err(|ColumnFull| TableError::ColumnFull { column: i })?;
+            if let Err(ColumnFull) = builder.push(cell.as_ref()) {
+                let e = TableError::ColumnFull { column: i };
+                self.broken = Some(e.clone());
+                return Err(e);
+            }
         }
         self.rows += 1;
         Ok(())

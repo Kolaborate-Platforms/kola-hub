@@ -5,6 +5,10 @@ use std::collections::HashMap;
 /// A dictionary column gives up and becomes a plain text column when it holds this many distinct values.
 const MAX_DICT_ENTRIES: usize = 4_096;
 
+/// Values longer than this never go in a dictionary. A dictionary keeps each value twice, so long
+/// values would cost double.
+const MAX_DICT_VALUE_BYTES: usize = 128;
+
 /// Which storage shape a column currently uses.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ColumnKind {
@@ -78,7 +82,8 @@ impl Column {
     pub fn heap_bytes(&self) -> usize {
         match self {
             Column::Dictionary { values, codes } => {
-                codes.capacity() * 4 + values.iter().map(|v| v.len() + 16).sum::<usize>()
+                // Each value is held twice (list and lookup map).
+                codes.capacity() * 4 + values.iter().map(|v| 2 * (v.len() + 16)).sum::<usize>()
             }
             Column::Plain { bytes, offsets } => bytes.capacity() + offsets.capacity() * 4,
         }
@@ -130,7 +135,7 @@ impl ColumnBuilder {
                 codes.push(code);
                 return Ok(());
             }
-            if values.len() < MAX_DICT_ENTRIES {
+            if values.len() < MAX_DICT_ENTRIES && cell.len() <= MAX_DICT_VALUE_BYTES {
                 let code = values.len() as u32;
                 let value: Box<str> = cell.into();
                 lookup.insert(value.clone(), code);
@@ -157,7 +162,7 @@ impl ColumnBuilder {
         let State::Dict { values, codes, .. } = &self.state else {
             return Ok(());
         };
-        let mut bytes = Vec::with_capacity(codes.len() * 8);
+        let mut bytes = Vec::with_capacity(codes.len().saturating_mul(8));
         let mut offsets = Vec::with_capacity(codes.len() + 1);
         offsets.push(0u32);
         for &code in codes {
@@ -186,5 +191,27 @@ impl ColumnBuilder {
                 Column::Plain { bytes, offsets }
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn long_values_skip_the_dictionary() {
+        let mut b = ColumnBuilder::new();
+        b.push(&"z".repeat(MAX_DICT_VALUE_BYTES + 1)).unwrap();
+        let c = b.finish();
+        assert_eq!(c.kind(), ColumnKind::Plain);
+        assert_eq!(c.get(0).map(str::len), Some(MAX_DICT_VALUE_BYTES + 1));
+    }
+
+    #[test]
+    fn dictionary_memory_counts_both_copies() {
+        let mut b = ColumnBuilder::new();
+        b.push("hello").unwrap();
+        let c = b.finish();
+        assert!(c.heap_bytes() >= 2 * "hello".len());
     }
 }
