@@ -8,3 +8,7 @@ Thumbs.db
 tests/fixtures/generated/
 *.sqlite-wal
 *.sqlite-shm
+# Local working notes, never committed
+.kh-brief/
+/spikes/*/target/
+/spikes/*/src-tauri/target/
