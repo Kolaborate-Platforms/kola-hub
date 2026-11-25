@@ -26,6 +26,7 @@ confidence-threshold = 0.9
 [bans]
 multiple-versions = "warn"
 wildcards = "deny"
+allow-wildcard-paths = true
 # Only kh-update may use an HTTP client. Every crate below may be pulled in
 # only by kh-update (the wrapper list). Anyone else depending on one fails CI.
 deny = [
