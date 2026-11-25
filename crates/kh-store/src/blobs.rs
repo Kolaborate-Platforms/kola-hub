@@ -11,6 +11,7 @@ use sha2::{Digest, Sha256};
 use crate::atomic::sync_file;
 use crate::error::{Result, StoreError};
 use crate::names::hex;
+use crate::project::make_real_dir;
 
 const CHUNK_BYTES: usize = 64 * 1024;
 const HASH_HEX_CHARS: usize = 64;
@@ -61,7 +62,8 @@ pub struct BlobStore {
 impl BlobStore {
     /// Opens the folder, creating it if needed, and removes half written temporary files left by a crash.
     pub fn open(dir: PathBuf) -> Result<Self> {
-        fs::create_dir_all(dir.join(TMP_DIR))?;
+        fs::create_dir_all(&dir)?;
+        make_real_dir(&dir.join(TMP_DIR))?;
         let store = Self { dir };
         store.sweep_tmp()?;
         Ok(store)
@@ -69,9 +71,10 @@ impl BlobStore {
 
     fn sweep_tmp(&self) -> Result<()> {
         for entry in fs::read_dir(self.dir.join(TMP_DIR))? {
-            let path = entry?.path();
-            if path.is_file() {
-                fs::remove_file(path)?;
+            let entry = entry?;
+            // The entry's own type, so a link is never followed.
+            if entry.file_type()?.is_file() {
+                fs::remove_file(entry.path())?;
             }
         }
         Ok(())
@@ -114,12 +117,12 @@ impl BlobStore {
 
     fn place(&self, tmp: &Path, id: &BlobId) -> Result<()> {
         let dest = self.path_of(id);
+        let shard = dest.parent().ok_or(StoreError::BadName)?;
+        make_real_dir(shard)?;
         if dest.is_file() && self.verify(id).is_ok() {
             fs::remove_file(tmp)?;
             return Ok(());
         }
-        let shard = dest.parent().ok_or(StoreError::BadName)?;
-        fs::create_dir_all(shard)?;
         // A damaged copy under this name is replaced in one step, never removed first.
         if let Err(e) = fs::rename(tmp, &dest) {
             let _ = fs::remove_file(tmp);

@@ -5,6 +5,7 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use rusqlite::config::DbConfig;
 use rusqlite::{Connection, OpenFlags, OptionalExtension, params};
 use serde::{Deserialize, Serialize};
 
@@ -16,6 +17,7 @@ use crate::trash::RepairReport;
 const DB_FILE: &str = "project.sqlite";
 const BLOBS_DIR: &str = "blobs";
 pub(crate) const TRASH_DIR: &str = "trash";
+const DB_SIDE_SUFFIXES: [&str; 3] = ["-wal", "-shm", "-journal"];
 const QUICK_CHECK_OK: &str = "ok";
 const BUSY_TIMEOUT_MS: u32 = 5_000;
 
@@ -261,9 +263,13 @@ pub(crate) fn rel_text(root: &Path, full: &Path) -> Result<String> {
 }
 
 /// Creates `dir` if missing and refuses a link or file standing where a folder must be.
-fn make_real_dir(dir: &Path) -> Result<()> {
-    if fs::symlink_metadata(dir).is_err() {
-        fs::create_dir(dir)?;
+/// Makes the folder if it is missing, and refuses a link or anything else standing under its name.
+pub(crate) fn make_real_dir(dir: &Path) -> Result<()> {
+    if fs::symlink_metadata(dir).is_err()
+        && let Err(e) = fs::create_dir(dir)
+        && e.kind() != std::io::ErrorKind::AlreadyExists
+    {
+        return Err(e.into());
     }
     real_dir(dir).map(drop)
 }
@@ -276,8 +282,30 @@ fn real_dir(dir: &Path) -> Result<PathBuf> {
     Ok(dir.to_path_buf())
 }
 
+/// SQLite writes to these files beside the database, so none of them may be a link.
+fn refuse_linked_side_files(database: &Path) -> Result<()> {
+    for suffix in DB_SIDE_SUFFIXES {
+        let mut name = database.as_os_str().to_owned();
+        name.push(suffix);
+        if fs::symlink_metadata(&name).is_ok_and(|m| !m.is_file()) {
+            return Err(StoreError::OutsideProject);
+        }
+    }
+    Ok(())
+}
+
+/// A project folder may come from anyone, so its database gets no triggers, views or trusted schema.
+fn distrust_database(conn: &Connection) -> Result<()> {
+    conn.set_db_config(DbConfig::SQLITE_DBCONFIG_DEFENSIVE, true)?;
+    conn.set_db_config(DbConfig::SQLITE_DBCONFIG_TRUSTED_SCHEMA, false)?;
+    conn.set_db_config(DbConfig::SQLITE_DBCONFIG_ENABLE_TRIGGER, false)?;
+    conn.set_db_config(DbConfig::SQLITE_DBCONFIG_ENABLE_VIEW, false)?;
+    Ok(())
+}
+
 /// Refuses a database that is a link, or one made by a newer version, before anything is written.
 fn refuse_unusable_database(path: &Path) -> Result<()> {
+    refuse_linked_side_files(path)?;
     let Ok(meta) = fs::symlink_metadata(path) else {
         return Ok(());
     };
@@ -285,6 +313,7 @@ fn refuse_unusable_database(path: &Path) -> Result<()> {
         return Err(StoreError::OutsideProject);
     }
     let conn = Connection::open_with_flags(path, OpenFlags::SQLITE_OPEN_READ_ONLY)?;
+    distrust_database(&conn)?;
     let found: u32 = conn.query_row("PRAGMA user_version", [], |r| r.get(0))?;
     if found > SCHEMA_VERSION {
         return Err(StoreError::NewerVersion {
@@ -297,6 +326,7 @@ fn refuse_unusable_database(path: &Path) -> Result<()> {
 
 fn open_database(path: &Path) -> Result<Connection> {
     let mut conn = Connection::open(path)?;
+    distrust_database(&conn)?;
     conn.busy_timeout(std::time::Duration::from_millis(u64::from(BUSY_TIMEOUT_MS)))?;
     let found: u32 = conn.query_row("PRAGMA user_version", [], |r| r.get(0))?;
     let check: String = conn.query_row("PRAGMA quick_check", [], |r| r.get(0))?;
@@ -409,6 +439,40 @@ mod tests {
                 Project::open_or_create(d.path()),
                 Err(StoreError::OutsideProject)
             ));
+        }
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn links_inside_the_work_folder_never_touch_outside_files() {
+        for planted in [
+            "blobs/tmp",
+            "project.sqlite-wal",
+            "project.sqlite-shm",
+            "project.sqlite-journal",
+        ] {
+            let d = root();
+            let outside = root();
+            let keep = outside.path().join("keep.txt");
+            fs::write(&keep, "mine").expect("outside file");
+            drop(Project::open_or_create(d.path()).expect("open"));
+            let link = d.path().join(WORK_DIR).join(planted);
+            let _ = fs::remove_dir_all(&link);
+            let _ = fs::remove_file(&link);
+            let target = if planted == "blobs/tmp" {
+                outside.path()
+            } else {
+                keep.as_path()
+            };
+            std::os::unix::fs::symlink(target, &link).expect("link");
+            assert!(
+                matches!(
+                    Project::open_or_create(d.path()),
+                    Err(StoreError::OutsideProject)
+                ),
+                "{planted}"
+            );
+            assert_eq!(fs::read_to_string(&keep).expect("still there"), "mine");
         }
     }
 

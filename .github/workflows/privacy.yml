@@ -34,6 +34,10 @@ jobs:
         run: bash scripts/test-privacy-check.sh
       - name: Check the whole history
         run: bash scripts/privacy-check.sh history HEAD
+      - name: Check the branch or tag name
+        env:
+          REF_NAME: ${{ github.head_ref || github.ref_name }}
+        run: bash scripts/privacy-check.sh text "the branch or tag name" "$REF_NAME"
       - name: Check the pull request title and description
         if: github.event_name == 'pull_request'
         env:

@@ -96,5 +96,17 @@ if git push -q "$work/remote.git" main >/dev/null 2>&1; then
   failures=$((failures + 1))
 fi
 
+git reset -q --hard "$base"
+if git push -q "$work/remote.git" "main:refs/heads/jane${at}mailprovider.com" >/dev/null 2>&1; then
+  echo "NOT BLOCKED: personal detail in the branch name"
+  failures=$((failures + 1))
+fi
+git branch -q "jane${at}mailprovider.com"
+if git push -q "$work/remote.git" "jane${at}mailprovider.com:refs/heads/clean" >/dev/null 2>&1; then
+  echo "NOT BLOCKED: personal detail in the local branch name"
+  failures=$((failures + 1))
+fi
+git push -q "$work/remote.git" main >/dev/null 2>&1 || { echo "WRONGLY BLOCKED: clean push"; failures=$((failures + 1)); }
+
 [ "$failures" -eq 0 ] || { echo "$failures privacy checks failed"; exit 1; }
 echo "privacy check blocks every planted case"

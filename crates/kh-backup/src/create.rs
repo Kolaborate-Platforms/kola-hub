@@ -24,6 +24,7 @@ struct Entry {
 struct Scan {
     entries: Vec<Entry>,
     skipped: Vec<String>,
+    bytes: u64,
 }
 
 fn is_link_like(meta: &fs::Metadata) -> bool {
@@ -51,6 +52,7 @@ fn scan(sources: &[Source], limits: &Limits) -> Result<Scan> {
     let mut out = Scan {
         entries: Vec::new(),
         skipped: Vec::new(),
+        bytes: 0,
     };
     for source in sources {
         check_part(&source.label)?;
@@ -60,6 +62,10 @@ fn scan(sources: &[Source], limits: &Limits) -> Result<Scan> {
         let mut stack = vec![(source.folder.clone(), source.label.clone())];
         while let Some((dir, prefix)) = stack.pop() {
             scan_dir(&dir, &prefix, &mut stack, &mut names, &mut out)?;
+            // Refuse now: restore would reject a larger backup after it had been trusted.
+            if out.bytes > limits.max_bytes {
+                return Err(Error::TooBig);
+            }
         }
     }
     Ok(out)
@@ -85,6 +91,7 @@ fn scan_dir(
             stack.push((child.path(), path));
         } else if meta.is_file() && !name.ends_with(TEMP_SUFFIX) {
             names.add_file(&path)?;
+            out.bytes = out.bytes.saturating_add(meta.len());
             out.entries.push(Entry {
                 path,
                 abs: child.path(),
@@ -213,5 +220,25 @@ pub(crate) fn create_impl(
             bytes: totals.1,
             skipped: found.skipped,
         }),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_project_larger_than_restore_accepts_is_refused_before_writing() {
+        let d = tempfile::tempdir().expect("tempdir");
+        fs::write(d.path().join("a.csv"), "123456").expect("file");
+        let source = Source {
+            label: "p".into(),
+            folder: d.path().to_path_buf(),
+        };
+        let limits = Limits {
+            max_bytes: 5,
+            ..Limits::default()
+        };
+        assert!(matches!(scan(&[source], &limits), Err(Error::TooBig)));
     }
 }

@@ -5,7 +5,7 @@ check="$(git rev-parse --show-toplevel)/scripts/privacy-check.sh"
 zero='^0+$'
 while read -r local_ref local_sha remote_ref remote_sha; do
   [[ $local_sha =~ $zero ]] && continue
-  "$check" text "the branch or tag name" "$remote_ref"
+  "$check" text "the branch or tag name" "$local_ref $remote_ref"
   if [ "$(git cat-file -t "$local_sha")" = "tag" ]; then
     "$check" text "the tag" "$(git cat-file -p "$local_sha")"
   fi

@@ -175,6 +175,9 @@ impl Project {
     /// Puts an item back. If its name is taken it comes back as `name (restored).ext`. Nothing is overwritten.
     pub fn restore_from_trash(&self, id: &TrashId) -> Result<FileId> {
         let dir = self.trash_root().join(&id.0);
+        if !fs::symlink_metadata(&dir).is_ok_and(|m| m.is_dir()) {
+            return Err(StoreError::NotFound);
+        }
         let mut entry = read_entry(&dir).map_err(|_| StoreError::NotFound)?;
         if entry.state != State::Trashed || !payload_exists(&dir) {
             return Err(StoreError::Conflict(
