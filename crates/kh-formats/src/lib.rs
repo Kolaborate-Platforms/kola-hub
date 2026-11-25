@@ -1,1 +1,8 @@
-//! File formats: CSV, XLSX, images, JSON Lines, COCO and YOLO export.
+//! File formats: CSV today; XLSX, images, JSON Lines, COCO and YOLO later.
+//!
+//! Every file is treated as hostile. Readers take explicit limits and fail with a plain message
+//! instead of using unbounded memory.
+
+mod csv_read;
+
+pub use csv_read::{CsvError, CsvLimits, CsvReport, read_csv, sniff_delimiter};
