@@ -27,6 +27,7 @@ regexTarget = "match"
 regexes = [
   '''@users\.noreply\.github\.com$''',
   '''^noreply@(anthropic|github)\.com$''',
+  '''^support@github\.com$''',
   '''^git@github\.com$''',
   '''@([A-Za-z0-9-]+\.)*example\.(com|org|net)$''',
   '''\.(test|invalid)$''',
