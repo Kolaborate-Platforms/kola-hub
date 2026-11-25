@@ -1,0 +1,10 @@
+/target
+**/*.rs.bk
+node_modules/
+ui/dist/
+.DS_Store
+Thumbs.db
+# Generated fixtures (regenerate with the scripts in scripts/)
+tests/fixtures/generated/
+*.sqlite-wal
+*.sqlite-shm

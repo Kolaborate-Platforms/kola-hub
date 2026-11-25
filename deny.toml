@@ -1,0 +1,53 @@
+# cargo-deny policy. See docs/BUILD_SPEC.md sections 9 and 11.3.
+
+[graph]
+all-features = true
+
+[advisories]
+version = 2
+yanked = "deny"
+
+[licenses]
+version = 2
+# Permissive licences only. No GPL, AGPL or LGPL.
+allow = [
+  "MIT",
+  "Apache-2.0",
+  "Apache-2.0 WITH LLVM-exception",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "ISC",
+  "Unicode-3.0",
+  "Zlib",
+  "CC0-1.0",
+]
+confidence-threshold = 0.9
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# Only kh-update may use an HTTP client. Every crate below may be pulled in
+# only by kh-update (the wrapper list). Anyone else depending on one fails CI.
+deny = [
+  { crate = "reqwest", wrappers = ["kh-update"] },
+  { crate = "hyper", wrappers = ["kh-update"] },
+  { crate = "ureq", wrappers = ["kh-update"] },
+  { crate = "isahc", wrappers = ["kh-update"] },
+  { crate = "attohttpc", wrappers = ["kh-update"] },
+  { crate = "minreq", wrappers = ["kh-update"] },
+  { crate = "surf", wrappers = ["kh-update"] },
+  { crate = "curl", wrappers = ["kh-update"] },
+  { crate = "curl-sys", wrappers = ["kh-update"] },
+  { crate = "openssl", wrappers = ["kh-update"] },
+  { crate = "native-tls", wrappers = ["kh-update"] },
+  # Telemetry and crash upload are never allowed anywhere.
+  { crate = "sentry" },
+  { crate = "sentry-core" },
+  { crate = "opentelemetry" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

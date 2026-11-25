@@ -1,0 +1,11 @@
+[package]
+name = "kh-core"
+description = "Table engine: typed columns, streaming, step replay, undo. No UI, no file-format code."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
