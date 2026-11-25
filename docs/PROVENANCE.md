@@ -57,6 +57,8 @@ Each new dependency needs a reason, a licence check and a size check in its PR. 
 | `rusqlite` (feature `bundled`, brings `libsqlite3-sys` and SQLite) | 0.41 | MIT (SQLite is public domain) | The project database in `kh-store`: WAL, `synchronous=FULL`, `user_version` migrations. `bundled` so nothing needs installing on the laptop | Not measured yet |
 | `sha2` | 0.11 | MIT OR Apache-2.0 | SHA-256 for the content store, so stored content is checked on read | Not measured yet |
 | `serde` and `serde_json` | 1.x | MIT OR Apache-2.0 | Trash journal entries, the recent projects list, and the serialisable types that reach the interface | Not measured yet |
+| `argon2`, `chacha20poly1305`, `aead-stream` | 0.6, 0.11, 0.6 | MIT OR Apache-2.0 | Backup key and STREAM encryption (RustCrypto) | Not measured yet |
+| `sha2`, `getrandom`, `zeroize` | 0.11, 0.4, 1.x | MIT OR Apache-2.0 | Backup hashes, random salt, wiping keys | Not measured yet |
 
 ## Bundled assets
 
