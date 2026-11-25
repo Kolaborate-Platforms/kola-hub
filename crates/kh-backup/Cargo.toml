@@ -9,3 +9,15 @@ publish = false
 
 [lints]
 workspace = true
+
+[dependencies]
+aead-stream = { version = "0.6.0", features = ["alloc"] }
+argon2 = { version = "0.6.0", features = ["zeroize"] }
+chacha20poly1305 = { version = "0.11.0", features = ["zeroize"] }
+getrandom = "0.4.3"
+kh-store = { version = "0.0.0", path = "../kh-store" }
+sha2 = "0.11.1"
+zeroize = "1.9.2"
+
+[dev-dependencies]
+tempfile = "3.27.0"

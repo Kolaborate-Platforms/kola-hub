@@ -52,6 +52,8 @@ Each new dependency needs a reason, a licence check and a size check in its PR. 
 | `csv` | 1.x | Unlicense OR MIT | Streaming CSV reader | Not measured yet |
 | `tempfile` | 3.x | MIT OR Apache-2.0 | Tests only | Not shipped |
 | `proptest` | 1.x | MIT OR Apache-2.0 | Fuzz style tests only | Not shipped |
+| `argon2`, `chacha20poly1305`, `aead-stream` | 0.6, 0.11, 0.6 | MIT OR Apache-2.0 | Backup key and STREAM encryption (RustCrypto) | Not measured yet |
+| `sha2`, `getrandom`, `zeroize` | 0.11, 0.4, 1.x | MIT OR Apache-2.0 | Backup hashes, random salt, wiping keys | Not measured yet |
 
 ## Bundled assets
 
