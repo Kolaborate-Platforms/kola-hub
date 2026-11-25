@@ -1,0 +1,1 @@
+Added the desktop user interface for Home, Files, Clean (Profile, Fix step by step, Reuse steps), Backup with Recently deleted, Settings, and a placeholder for Annotate, with keyboard shortcuts and a Ctrl+K command palette.
