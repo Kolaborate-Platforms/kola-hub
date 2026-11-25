@@ -1,0 +1,309 @@
+id,date,market,product,price
+W4-0001,26/11/2026,Kisenyi,rice,"UGX 6,100"
+W4-0002,25 Nov 2026,kisenyi,rice,"UGX 6,200"
+W4-0003,2026-11-26,KISENYI,rice,"UGX 1,400"
+W4-0004,28 November 2026,Kisenyi ,rice,"UGX 2,700"
+W4-0005,28/11/2026,Kiseny,millet,5300
+W4-0006,23 Nov 2026,Kisenyii,maize,8500
+W4-0007,2026-11-22,Kissenyi,millet,1100
+W4-0008,23 November 2026,Nakasero,rice,8200
+W4-0009,25/11/2026,Nakasero,sugar,"UGX8,700"
+W4-0010,24 Nov 2026,Kisenyi,beans,"UGX4,900"
+W4-0011,2026-11-27,Kisenyi,sugar,"UGX8,400"
+W4-0012,28 November 2026,Kisenyi,sugar,"UGX9,900"
+W4-0013,26/11/2026,Kisenyi,millet,"7,900"
+W4-0014,28 Nov 2026,Owino,maize,"5,500"
+W4-0015,2026-11-25,Kiseny,beans,"1,500"
+W4-0016,25 November 2026,Owino,maize,"5,500"
+W4-0017,22/11/2026,Nakasero,millet ,"UGX 7,300"
+W4-0018,25 Nov 2026,Nakasero,beans,"UGX 5,400"
+W4-0019,2026-11-24,Kisenyi,sugar,"UGX 4,100"
+W4-0020,26 November 2026,Owino,beans,"UGX 7,800"
+W4-0021,23/11/2026,Owino,maize,6000
+W4-0022,28 Nov 2026,Nakasero,millet,6800
+W4-0023,2026-11-22,Kisenyi,maize,5000
+W4-0024,26 November 2026,Owino,beans,2800
+W4-0025,28/11/2026,Kisenyi,beans,"UGX2,600"
+W4-0026,22 Nov 2026,Nakasero,beans,"UGX9,200"
+W4-0027,2026-11-28,Owino,rice,"UGX6,000"
+W4-0028,24 November 2026,Owino,sugar,"UGX1,500"
+W4-0029,25/11/2026,kisenyi,millet,"4,600"
+W4-0030,27 Nov 2026,Kisenyi ,maize,"8,900"
+W4-0031,2026-11-24,Nakasero,millet,"8,800"
+W4-0032,24 November 2026,Kisenyi,beans,"9,500"
+W4-0033,24/11/2026,Kiseny,rice,"UGX 8,300"
+W4-0034,26 Nov 2026,Owino,beans,"UGX 1,800"
+W4-0035,2026-11-25,Nakasero,sugar,"UGX 1,300"
+W4-0036,26 November 2026,Nakasero,beans,"UGX 3,300"
+W4-0037,25/11/2026,kisenyi,beans,2000
+W4-0038,26 Nov 2026,Nakasero,maize,6600
+W4-0039,2026-11-25,Kisenyi,beans,3200
+W4-0040,26 November 2026,Kiseny,millet,9100
+W4-0041,28/11/2026,Owino,beans,"UGX1,100"
+W4-0042,23 Nov 2026,Kisenyi,beans ,"UGX7,700"
+W4-0043,2026-11-27,Owino,maize,"UGX2,000"
+W4-0044,24 November 2026,Kisenyi,rice,"UGX6,700"
+W4-0045,22/11/2026,Kisenyi,millet,"1,800"
+W4-0046,28 Nov 2026,Kisenyi,sugar,"4,400"
+W4-0047,2026-11-26,Kisenyi,millet,"5,800"
+W4-0048,25 November 2026,Kisenyi,maize,"1,700"
+W4-0049,28/11/2026,Nakasero,maize,"UGX 6,500"
+W4-0050,23 Nov 2026,Owino,millet,"UGX 1,700"
+W4-0051,2026-11-23,Kisenyi,rice,"UGX 9,800"
+W4-0052,23 November 2026,Kisenyi,rice,"UGX 9,200"
+W4-0053,23/11/2026,Owino,rice,7600
+W4-0054,26 Nov 2026,Kisenyi,rice,7500
+W4-0055,2026-11-24,Kisenyi,millet,7800
+W4-0056,24 November 2026,Nakasero,maize,8500
+W4-0057,26/11/2026,Nakasero,maize,"UGX7,400"
+W4-0058,28 Nov 2026,Nakasero,rice,"UGX5,300"
+W4-0059,2026-11-25,Kisenyi,beans,"UGX7,600"
+W4-0060,26 November 2026,kisenyi,sugar,"UGX4,500"
+W4-0061,28/11/2026,Nakasero,sugar,"4,400"
+W4-0062,27 Nov 2026,Nakasero,sugar,"9,100"
+W4-0063,2026-11-26,Owino,beans,"9,700"
+W4-0064,22 November 2026,Nakasero,millet,"5,400"
+W4-0065,26/11/2026,Nakasero,sugar,"UGX 9,900"
+W4-0066,24 Nov 2026,Kisenyi,beans,"UGX 2,400"
+W4-0067,2026-11-26,Owino,maize,"UGX 1,200"
+W4-0068,24 November 2026,Owino,rice,"UGX 8,300"
+W4-0069,25/11/2026,Owino,beans,4700
+W4-0070,26 Nov 2026,Nakasero,sugar,7000
+W4-0071,2026-11-25,Kisenyi,millet,8800
+W4-0072,25 November 2026,Owino,maize,2000
+W4-0073,26/11/2026,Owino,maize,"UGX6,000"
+W4-0074,27 Nov 2026,Owino,beans,"UGX8,400"
+W4-0075,2026-11-23,Nakasero,maize,"UGX4,900"
+W4-0076,24 November 2026,Kisenyi,sugar,"UGX5,400"
+W4-0077,23/11/2026,Owino,rice,"6,100"
+W4-0078,23 Nov 2026,Kisenyi,beans,"7,500"
+W4-0079,2026-11-22,Owino,millet ,"5,300"
+W4-0080,28 November 2026,Kisenyi,millet,"5,300"
+W4-0081,24/11/2026,Kisenyi,millet,"UGX 9,300"
+W4-0082,24 Nov 2026,Kisenyi,sugar,"UGX 9,000"
+W4-0083,2026-11-25,Nakasero,sugar,"UGX 8,700"
+W4-0084,25 November 2026,Owino,beans,"UGX 8,700"
+W4-0085,28/11/2026,Kisenyi,maize,5500
+W4-0086,24 Nov 2026,Owino,sugar,3600
+W4-0087,2026-11-28,Kisenyi,millet,7300
+W4-0085,28/11/2026,Kisenyi,maize,5500
+W4-0088,28 November 2026,Kisenyi,sugar,5200
+W4-0089,25/11/2026,Owino,millet,"UGX5,800"
+W4-0090,26 Nov 2026,Owino,rice,"UGX8,500"
+W4-0091,2026-11-25,Kisenyii,rice,
+W4-0092,26 November 2026,Kisenyi,rice,"UGX7,000"
+W4-0093,23/11/2026,Nakasero,maize,"7,100"
+W4-0094,27 Nov 2026,Kisenyi,beans,"8,500"
+W4-0095,2026-11-25,Owino,millet,"2,900"
+W4-0096,28 November 2026,Nakasero,rice,"4,200"
+W4-0097,25/11/2026,Kisenyi,rice,"UGX 8,600"
+W4-0098,22 Nov 2026,Kisenyi,beans,"UGX 7,700"
+W4-0099,2026-11-25,Nakasero,beans,"UGX 4,300"
+W4-0100,23 November 2026,Nakasero,sugar,"UGX 9,400"
+W4-0101,23/11/2026,Kisenyi,millet,7000
+W4-0102,28 Nov 2026,Nakasero,sugar,6800
+W4-0103,2026-11-26,Owino,rice,
+W4-0104,22-Nov,Owino,rice,5600
+W4-0105,28/11/2026,Kisenyi,sugar,"UGX1,500"
+W4-0106,28 Nov 2026,Nakasero,beans,"UGX7,800"
+W4-0107,2026-11-23,Nakasero,sugar,"UGX6,000"
+W4-0108,24 November 2026,Kisenyi ,rice,"UGX8,800"
+W4-0109,23/11/2026,Kisenyi,millet,"9,700"
+W4-0110,28 Nov 2026,Nakasero,rice,"1,700"
+W4-0111,2026-11-26,Kisenyi,rice,"7,300"
+W4-0112,25 November 2026,kisenyi,beans,"1,500"
+W4-0113,22/11/2026,Owino,rice,"UGX 5,000"
+W4-0114,22 Nov 2026,Kisenyi,maize,"UGX 9,500"
+W4-0115,2026-11-24,Nakasero,beans,"UGX 5,500"
+W4-0116,25 November 2026,Owino,beans,"UGX 5,300"
+W4-0117,27/11/2026,Kisenyi ,rice,4900
+W4-0118,25 Nov 2026,Kiseny,beans,1200
+W4-0119,2026-11-24,kisenyi,millet,1100
+W4-0120,25 November 2026,Owino,rice,1700
+W4-0121,26-Nov,Kisenyi,maize,"UGX3,100"
+W4-0122,22 Nov 2026,Nakasero,rice,"UGX3,700"
+W4-0123,2026-11-23,KISENYI,sugar,"UGX5,400"
+W4-0124,28 November 2026,KISENYI,beans,"UGX5,100"
+W4-0125,25/11/2026,Owino,millet,"9,600"
+W4-0126,23 Nov 2026,Kisenyii,millet,"6,700"
+W4-0127,2026-11-26,Nakasero,rice,"8,300"
+W4-0128,27 November 2026,Nakasero,millet,"5,500"
+W4-0129,22/11/2026,Kisenyi,millet,"UGX 3,300"
+W4-0130,28 Nov 2026,Kisenyi,rice,"UGX 7,500"
+W4-0131,2026-11-24,Kissenyi,maize,"UGX 3,400"
+W4-0123,2026-11-23,KISENYI,sugar,"UGX5,400"
+W4-0132,28 November 2026,Owino,beans,"UGX 7,500"
+W4-0133,24/11/2026,Owino,millet,8800
+W4-0134,23 Nov 2026,Owino,sugar,3700
+W4-0135,2026-11-28,Nakasero,rice,5400
+W4-0136,22 November 2026,Kisenyi,sugar,6900
+W4-0137,27/11/2026,Kisenyi,beans,"UGX2,000"
+W4-0138,26 Nov 2026,Owino,rice,"UGX7,800"
+W4-0139,2026-11-27,Kisenyi,beans,"UGX5,300"
+W4-0140,27 November 2026,kisenyi,beans,"UGX4,800"
+W4-0141,22/11/2026,Kisenyi,millet,"4,500"
+W4-0142,27 Nov 2026,Owino,rice,"7,600"
+W4-0143,2026-11-27,Nakasero,maize,"9,400"
+W4-0144,23 November 2026,Owino,millet,"7,000"
+W4-0145,23/11/2026,Owino,sugar,"UGX 8,800"
+W4-0146,24 Nov 2026,Owino,beans,"UGX 1,600"
+W4-0147,2026-11-23,Nakasero,millet,"UGX 2,500"
+W4-0148,26 November 2026,Nakasero,millet,"UGX 6,400"
+W4-0149,23/11/2026,Kisenyi,sugar,9000
+W4-0150,27 Nov 2026,Kisenyi,millet,1100
+W4-0151,2026-11-24,Owino,millet,7400
+W4-0152,26 November 2026,Owino,millet,9000
+W4-0153,22/11/2026,Nakasero,millet,"UGX3,800"
+W4-0154,23 Nov 2026,Kisenyi,rice,"UGX8,800"
+W4-0155,2026-11-23,Kisenyi,beans ,"UGX9,200"
+W4-0156,22 November 2026,Kisenyi,maize,"UGX3,200"
+W4-0157,26/11/2026,Kisenyi,beans,"6,100"
+W4-0158,23 Nov 2026,Owino,sugar,"9,200"
+W4-0159,2026-11-23,Nakasero,beans,"5,900"
+W4-0160,24 November 2026,KISENYI,beans,"8,400"
+W4-0161,23/11/2026,Kisenyi,millet,"UGX 4,700"
+W4-0149,23/11/2026,Kisenyi,sugar,9000
+W4-0162,22 Nov 2026,Kisenyi,beans,"UGX 1,100"
+W4-0163,2026-11-27,Nakasero,maize,"UGX 9,400"
+W4-0164,28 November 2026,Kiseny,rice,"UGX 9,900"
+W4-0165,28/11/2026,Kisenyi,sugar,4000
+W4-0166,26 Nov 2026,Kisenyi,rice,1800
+W4-0167,2026-11-24,Kiseny,millet ,8800
+W4-0168,23 November 2026,Kisenyi,rice,6700
+W4-0168,23 November 2026,Kisenyi,rice,6700
+W4-0169,27/11/2026,Nakasero,millet,"UGX5,600"
+W4-0170,24 Nov 2026,Kiseny,beans,
+W4-0171,2026-11-28,Kisenyi,maize ,"UGX7,200"
+W4-0172,26 November 2026,Nakasero,beans,"UGX5,200"
+W4-0173,24/11/2026,Nakasero,maize,"8,300"
+W4-0174,27 Nov 2026,Owino,beans,
+W4-0175,2026-11-22,Kissenyi,rice,"9,400"
+W4-0176,23 November 2026,Kisenyi,beans,"6,300"
+W4-0177,25/11/2026,Kisenyi,maize,"UGX 9,100"
+W4-0178,24 Nov 2026,Nakasero,sugar,"UGX 8,100"
+W4-0179,2026-11-26,Owino,sugar,"UGX 8,700"
+W4-0180,25 November 2026,Kiseny,sugar,"UGX 6,400"
+W4-0181,23/11/2026,Owino,sugar,6700
+W4-0182,26 Nov 2026,Kisenyi,sugar,2500
+W4-0175,2026-11-22,Kissenyi,rice,"9,400"
+W4-0183,2026-11-26,Kissenyi,beans,6100
+W4-0184,28 November 2026,Nakasero,millet,6200
+W4-0185,25/11/2026,Nakasero,rice,"UGX2,400"
+W4-0186,22 Nov 2026,Kisenyi,maize,"UGX6,100"
+W4-0187,2026-11-28,Owino,sugar,"UGX4,800"
+W4-0181,23/11/2026,Owino,sugar,6700
+W4-0188,22 November 2026,Owino,sugar,"UGX8,500"
+W4-0189,27/11/2026,Kisenyii,sugar,"7,000"
+W4-0190,28 Nov 2026,Kisenyi,millet,"4,900"
+W4-0191,2026-11-25,kisenyi,millet,"1,100"
+W4-0192,22 November 2026,Kisenyi,beans,"9,000"
+W4-0193,23/11/2026,Kisenyi,sugar,"UGX 6,100"
+W4-0194,24 Nov 2026,Kissenyi,rice,"UGX 8,300"
+W4-0195,2026-11-26,KISENYI,millet,"UGX 9,300"
+W4-0196,27-Nov,Nakasero,millet,"UGX 8,200"
+W4-0197,28/11/2026,Owino,millet,8200
+W4-0198,22 Nov 2026,Nakasero,maize,7400
+W4-0199,2026-11-25,Owino,maize,6500
+W4-0200,26 November 2026,Nakasero,sugar,9000
+W4-0201,26/11/2026,Kisenyi ,beans,"UGX4,200"
+W4-0202,22 Nov 2026,Kisenyi,rice,"UGX5,000"
+W4-0203,2026-11-25,Owino,millet,"UGX3,400"
+W4-0204,26 November 2026,Owino,millet,"UGX4,700"
+W4-0205,23/11/2026,Kisenyi,sugar,"4,300"
+W4-0206,26 Nov 2026,Nakasero,rice,"5,200"
+W4-0207,2026-11-23,Owino,rice,"2,200"
+W4-0208,24 November 2026,Owino,maize,"3,200"
+W4-0209,25/11/2026,Kisenyi ,beans,"UGX 1,800"
+W4-0197,28/11/2026,Owino,millet,8200
+W4-0210,22 Nov 2026,Kisenyi,rice,"UGX 1,400"
+W4-0211,2026-11-26,Kiseny,beans,"UGX 2,700"
+W4-0212,24 November 2026,kisenyi,sugar,"UGX 2,000"
+W4-0213,27/11/2026,Nakasero,beans,8300
+W4-0214,22 Nov 2026,Kisenyi ,rice,7600
+W4-0215,2026-11-25,kisenyi,beans,8500
+W4-0216,25 November 2026,Nakasero,sugar,5200
+W4-0217,26/11/2026,KISENYI,rice,"UGX8,400"
+W4-0218,23 Nov 2026,Kisenyi,sugar,"UGX6,200"
+W4-0219,2026-11-25,Kisenyi,sugar,"UGX7,100"
+W4-0220,28 November 2026,Kisenyi,maize,"UGX1,000"
+W4-0221,28/11/2026,Kisenyi,beans,"4,400"
+W4-0222,24 Nov 2026,Nakasero,maize,"4,800"
+W4-0223,2026-11-22,Kisenyii,maize,"5,600"
+W4-0224,22 November 2026,Nakasero,sugar,"1,300"
+W4-0225,26/11/2026,Nakasero,millet,"UGX 6,900"
+W4-0226,24 Nov 2026,Nakasero,beans,"UGX 2,900"
+W4-0227,2026-11-26,Kisenyi,rice,"UGX 3,000"
+W4-0228,26 November 2026,Kisenyi,maize,"UGX 1,900"
+W4-0229,27/11/2026,Kisenyi,millet,6100
+W4-0230,22 Nov 2026,Owino,sugar,1700
+W4-0231,2026-11-26,Owino,sugar ,8700
+W4-0232,26 November 2026,Kisenyi,sugar,8900
+W4-0233,27/11/2026,Owino,beans,"UGX7,700"
+W4-0234,27 Nov 2026,Kisenyi,rice,"UGX9,600"
+W4-0235,2026-11-25,Nakasero,millet,"UGX9,400"
+W4-0236,26 November 2026,Nakasero,millet,"UGX5,600"
+W4-0237,25-Nov,Kisenyi,beans,"2,200"
+W4-0238,25 Nov 2026,Kisenyi,maize,"8,300"
+W4-0239,2026-11-27,Kisenyi,millet,"3,200"
+W4-0240,25 November 2026,Kisenyi,beans,"9,300"
+W4-0241,22/11/2026,Kisenyi,sugar,"UGX 9,800"
+W4-0242,25 Nov 2026,Kisenyi,sugar,"UGX 4,400"
+W4-0243,2026-11-26,Nakasero,beans,"UGX 2,100"
+W4-0244,24 November 2026,Kisenyi,beans,
+W4-0245,22/11/2026,Nakasero,maize,2400
+W4-0246,25 Nov 2026,Nakasero,beans,3700
+W4-0247,2026-11-28,Nakasero,rice,7000
+W4-0248,27 November 2026,KISENYI,sugar,7100
+W4-0249,22/11/2026,Owino,sugar,"UGX4,300"
+W4-0250,24 Nov 2026,Owino,beans,"UGX2,200"
+W4-0251,2026-11-23,Nakasero,rice,"UGX1,200"
+W4-0252,22 November 2026,Kisenyi,sugar,"UGX8,600"
+W4-0253,23/11/2026,Kisenyi ,maize,"1,600"
+W4-0254,23 Nov 2026,Nakasero,beans,"8,800"
+W4-0255,2026-11-28,Kisenyi,millet,"2,600"
+W4-0256,26 November 2026,Nakasero,rice,"2,700"
+W4-0257,26/11/2026,Nakasero,maize,"UGX 4,300"
+W4-0258,22 Nov 2026,Owino,millet,"UGX 1,900"
+W4-0259,2026-11-27,Kisenyi,sugar,"UGX 9,200"
+W4-0260,27 November 2026,Kisenyi,rice,"UGX 5,000"
+W4-0261,25/11/2026,kisenyi,millet,4600
+W4-0262,26 Nov 2026,Kissenyi,beans,4300
+W4-0263,2026-11-26,Kisenyi,sugar,8400
+W4-0264,25 November 2026,Kisenyi,beans,9000
+W4-0265,22/11/2026,Kisenyi,millet,"UGX3,200"
+W4-0266,25 Nov 2026,Owino,rice,"UGX8,000"
+W4-0267,2026-11-22,Nakasero,millet,"UGX4,100"
+W4-0268,26 November 2026,Kiseny,rice,"UGX8,500"
+W4-0269,23/11/2026,Nakasero,maize,"7,200"
+W4-0270,26 Nov 2026,Kisenyi ,rice,"5,300"
+W4-0271,2026-11-26,Nakasero,beans,"6,400"
+W4-0272,23 November 2026,Kisenyii,beans,"3,700"
+W4-0273,26/11/2026,kisenyi,rice,"UGX 8,200"
+W4-0274,22 Nov 2026,Owino,millet,"UGX 4,400"
+W4-0275,2026-11-24,Kisenyi,sugar,"UGX 3,100"
+W4-0276,24 November 2026,Owino,beans,"UGX 8,900"
+W4-0277,25/11/2026,Owino,beans,8800
+W4-0278,23 Nov 2026,Kisenyi,maize,
+W4-0279,2026-11-25,Nakasero,sugar,8700
+W4-0280,28 November 2026,Owino,maize,6800
+W4-0281,28/11/2026,Kisenyii,sugar,"UGX9,300"
+W4-0282,27 Nov 2026,Kisenyi,beans,"UGX3,500"
+W4-0283,2026-11-27,Owino,millet,"UGX8,000"
+W4-0284,28 November 2026,Owino,sugar,"UGX6,500"
+W4-0285,26/11/2026,Kissenyi,rice,"1,400"
+W4-0286,26 Nov 2026,KISENYI,maize,"1,900"
+W4-0287,2026-11-22,Kisenyi,rice,"1,700"
+W4-0288,27 November 2026,Kisenyi,millet,"2,300"
+W4-0289,27/11/2026,Owino,sugar,"UGX 3,200"
+W4-0290,27 Nov 2026,Kissenyi,millet,"UGX 2,800"
+W4-0291,2026-11-24,Kisenyi,maize,"UGX 6,600"
+W4-0292,24 November 2026,Nakasero,sugar,"UGX 3,500"
+W4-0288,27 November 2026,Kisenyi,millet,"2,300"
+W4-0293,27/11/2026,Owino,maize,8400
+W4-0294,25 Nov 2026,Owino,maize,9000
+W4-0295,2026-11-27,Kisenyi,beans,3600
+W4-0296,28 November 2026,Owino,beans,9700
+W4-0297,28/11/2026,Nakasero,millet,"UGX5,300"
+W4-0298,23 Nov 2026,Owino,millet,"UGX2,100"
+W4-0299,2026-11-26,Owino,millet,"UGX7,500"
+W4-0300,26 November 2026,Nakasero,beans,"UGX9,400"

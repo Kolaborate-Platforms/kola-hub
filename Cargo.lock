@@ -1975,6 +1975,13 @@ dependencies = [
 [[package]]
 name = "kh-clean"
 version = "0.0.0"
+dependencies = [
+ "kh-core",
+ "kh-formats",
+ "serde",
+ "serde_json",
+ "tempfile",
+]
 
 [[package]]
 name = "kh-core"
