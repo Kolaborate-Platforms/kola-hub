@@ -2,6 +2,7 @@
 **/*.rs.bk
 node_modules/
 ui/dist/
+ui/contract.gen.ts
 .DS_Store
 Thumbs.db
 # Generated fixtures (regenerate with the scripts in scripts/)

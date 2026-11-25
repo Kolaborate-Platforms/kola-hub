@@ -6,6 +6,8 @@ mod backup;
 mod bench;
 mod clean;
 mod commands;
+#[cfg(test)]
+mod contract_tests;
 mod dialogs;
 mod error;
 mod projects;

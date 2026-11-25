@@ -50,6 +50,9 @@ jobs:
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: Tests
         run: cargo nextest run --workspace --no-tests=pass
+      - name: Interface types match the commands
+        if: runner.os == 'Linux'
+        run: bash scripts/check-contract.sh
       - name: Doctests
         run: cargo test --workspace --doc
       - name: Deny (licences, bans, advisories)
