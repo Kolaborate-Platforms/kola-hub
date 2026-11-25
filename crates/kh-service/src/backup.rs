@@ -100,6 +100,7 @@ pub fn backup_create(
     progress: &mut dyn FnMut(ProgressView),
 ) -> AppResult<CreateReportView> {
     let sources = sources_for(shell, ids)?;
+    refuse_destination_inside(&sources, destination)?;
     let report = kh_backup::create(&sources, destination, passphrase, &mut |p| {
         progress(view(p))
     })?;
@@ -108,6 +109,24 @@ pub fn backup_create(
         bytes: report.bytes,
         skipped: report.skipped.iter().map(|p| file_name(p)).collect(),
     })
+}
+
+/// A backup saved inside a project would be packed into the next backup, and lost with the folder.
+fn refuse_destination_inside(sources: &[Source], destination: &Path) -> AppResult<()> {
+    let Some(parent) = destination.parent().and_then(|p| fs::canonicalize(p).ok()) else {
+        // A missing folder fails when the file is written, with its own message.
+        return Ok(());
+    };
+    let inside = sources.iter().any(|source| {
+        fs::canonicalize(&source.folder).is_ok_and(|folder| parent.starts_with(folder))
+    });
+    if inside {
+        return Err(AppError::new(
+            "backup-inside-project",
+            "Save the backup outside your project folders, for example on a USB drive.",
+        ));
+    }
+    Ok(())
 }
 
 /// Restores a backup into an empty folder.
@@ -229,5 +248,22 @@ mod tests {
             &mut ignore,
         );
         assert_eq!(unknown.expect_err("unknown").code, "not-found");
+    }
+
+    #[test]
+    fn a_backup_cannot_be_saved_inside_a_project_it_holds() {
+        let (_d, folder, shell, view) = shell_with_project();
+        fs::write(folder.path().join("a.csv"), "x\n1\n").expect("a");
+        let inside = folder.path().join("a.khbackup");
+        let refused = backup_create(
+            &shell,
+            std::slice::from_ref(&view.id),
+            "invented words",
+            &inside,
+            &mut |_| {},
+        )
+        .expect_err("inside");
+        assert_eq!(refused.code, "backup-inside-project");
+        assert!(!inside.exists());
     }
 }

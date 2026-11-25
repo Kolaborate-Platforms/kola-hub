@@ -25,6 +25,7 @@ if ($install.ExitCode -ne 0) { throw "Install failed with code $($install.ExitCo
 $folder = Join-Path $env:LOCALAPPDATA 'Kola Hub'
 $exe = Join-Path $folder 'kola-hub.exe'
 if (-not (Test-Path -LiteralPath $exe)) { throw "App not found after install: $exe" }
+if (-not (Test-Path -LiteralPath (Join-Path $folder 'kola-hub-mcp.exe'))) { throw 'The AI server was not installed' }
 $installedMB = (Get-ChildItem -LiteralPath $folder -Recurse -File | Measure-Object -Property Length -Sum).Sum / 1MB
 Write-Output ('Installed: {0:N1} MB (limit {1})' -f $installedMB, $InstalledLimitMB)
 

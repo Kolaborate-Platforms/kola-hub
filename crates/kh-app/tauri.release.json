@@ -1,0 +1,5 @@
+{
+  "bundle": {
+    "externalBin": ["binaries/kola-hub-mcp"]
+  }
+}

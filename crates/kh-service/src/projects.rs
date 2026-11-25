@@ -3,6 +3,7 @@
 use std::fs;
 use std::path::Path;
 
+use kh_clean::StepList;
 use kh_settings::Settings;
 use kh_store::names::WORK_DIR;
 use kh_store::{
@@ -56,6 +57,8 @@ pub struct FileRow {
     pub size_bytes: u64,
     /// Whether Clean can open it.
     pub kind: FileKind,
+    /// True when Clean has saved steps for this file, so they can be reused.
+    pub has_steps: bool,
 }
 
 /// The app's own version.
@@ -169,7 +172,9 @@ pub fn files_list(shell: &Shell, id: &ProjectId) -> AppResult<Vec<FileRow>> {
             continue;
         };
         let size_bytes = entry.metadata().map_or(0, |m| m.len());
+        let has_steps = has_saved_steps(&project, &file_id)?;
         rows.push(FileRow {
+            has_steps,
             id: file_id,
             kind: kind_of(&name),
             name,
@@ -178,6 +183,14 @@ pub fn files_list(shell: &Shell, id: &ProjectId) -> AppResult<Vec<FileRow>> {
     }
     rows.sort_by_key(|r| r.name.to_lowercase());
     Ok(rows)
+}
+
+/// An unreadable or empty saved list counts as none: there is nothing to reuse.
+fn has_saved_steps(project: &Project, file: &FileId) -> AppResult<bool> {
+    let saved = project.load_clean_steps(file)?;
+    Ok(saved
+        .and_then(|text| StepList::from_json(&text).ok())
+        .is_some_and(|list| !list.steps.is_empty()))
 }
 
 /// Moves a file to Recently deleted.
@@ -288,5 +301,17 @@ pub(crate) mod tests {
         );
         assert!(strings().expect("strings").is_object());
         assert!(!app_info().version.is_empty());
+    }
+
+    #[test]
+    fn a_file_says_whether_it_has_steps_to_reuse() {
+        let (_d, folder, shell, view) = shell_with_project();
+        fs::write(folder.path().join("a.csv"), "x\n 1 \n").expect("a");
+        let before = files_list(&shell, &view.id).expect("files");
+        assert!(!before[0].has_steps);
+        let session = crate::clean::clean_open(&shell, &view.id, &before[0].id).expect("open");
+        let step = kh_clean::Step::TrimSpaces { columns: None };
+        crate::clean::clean_add_step(&shell, &session.session_id, step).expect("step");
+        assert!(files_list(&shell, &view.id).expect("files")[0].has_steps);
     }
 }

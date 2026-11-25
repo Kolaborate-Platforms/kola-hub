@@ -1944,11 +1944,11 @@ dependencies = [
 
 [[package]]
 name = "kh-annotate"
-version = "0.0.0"
+version = "0.1.0"
 
 [[package]]
 name = "kh-app"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "kh-clean",
  "kh-core",
@@ -1965,7 +1965,7 @@ dependencies = [
 
 [[package]]
 name = "kh-backup"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "aead-stream",
  "argon2",
@@ -1979,7 +1979,7 @@ dependencies = [
 
 [[package]]
 name = "kh-clean"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "kh-core",
  "kh-formats",
@@ -1990,11 +1990,11 @@ dependencies = [
 
 [[package]]
 name = "kh-core"
-version = "0.0.0"
+version = "0.1.0"
 
 [[package]]
 name = "kh-formats"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "csv",
  "kh-core",
@@ -2004,7 +2004,7 @@ dependencies = [
 
 [[package]]
 name = "kh-mcp"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "kh-clean",
  "kh-service",
@@ -2017,7 +2017,7 @@ dependencies = [
 
 [[package]]
 name = "kh-service"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "kh-backup",
  "kh-clean",
@@ -2032,7 +2032,7 @@ dependencies = [
 
 [[package]]
 name = "kh-settings"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "kh-store",
  "serde",
@@ -2041,7 +2041,7 @@ dependencies = [
 
 [[package]]
 name = "kh-store"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "rusqlite",
  "rustix",
@@ -2053,7 +2053,7 @@ dependencies = [
 
 [[package]]
 name = "kh-update"
-version = "0.0.0"
+version = "0.1.0"
 
 [[package]]
 name = "libappindicator"

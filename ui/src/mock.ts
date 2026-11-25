@@ -56,13 +56,13 @@ const recentProjects: RecentProject[] = [
 
 const filesByProject: Record<string, FileRow[]> = {
   "proj-market": [
-    { id: "f-week3", name: "week3_prices.csv", sizeBytes: 1_240_000, kind: "csv" },
-    { id: "f-week4", name: "week4_prices.csv", sizeBytes: 1_180_000, kind: "csv" },
-    { id: "f-budget", name: "survey_budget.xlsx", sizeBytes: 49_200, kind: "other" },
-    { id: "f-notes", name: "field_notes.txt", sizeBytes: 8_400, kind: "other" },
+    { id: "f-week3", name: "week3_prices.csv", sizeBytes: 1_240_000, kind: "csv", hasSteps: false },
+    { id: "f-week4", name: "week4_prices.csv", sizeBytes: 1_180_000, kind: "csv", hasSteps: false },
+    { id: "f-budget", name: "survey_budget.xlsx", sizeBytes: 49_200, kind: "other", hasSteps: false },
+    { id: "f-notes", name: "field_notes.txt", sizeBytes: 8_400, kind: "other", hasSteps: false },
   ],
   "proj-clinic": [
-    { id: "f-visits", name: "visits_october.csv", sizeBytes: 620_000, kind: "csv" },
+    { id: "f-visits", name: "visits_october.csv", sizeBytes: 620_000, kind: "csv", hasSteps: false },
   ],
 };
 
@@ -498,6 +498,7 @@ export async function mockInvoke<T>(cmd: string, args: Record<string, unknown> =
           id: `f-restored-${Date.now()}`,
           name: item.name,
           sizeBytes: item.sizeBytes,
+          hasSteps: false,
           kind: item.name.endsWith(".csv") ? "csv" : "other",
         });
       }
@@ -665,7 +666,7 @@ export async function mockInvoke<T>(cmd: string, args: Record<string, unknown> =
       const outName = s.fileName.replace(/\.csv$/i, " (cleaned).csv");
       const saved: SavedFile = { id: `f-saved-${Date.now()}`, name: outName };
       filesByProject[s.projectId] = filesByProject[s.projectId] ?? [];
-      filesByProject[s.projectId].push({ id: saved.id, name: saved.name, sizeBytes: 1_120_000, kind: "csv" });
+      filesByProject[s.projectId].push({ id: saved.id, name: saved.name, sizeBytes: 1_120_000, kind: "csv", hasSteps: false });
       return saved as T;
     }
     case "clean_reuse": {

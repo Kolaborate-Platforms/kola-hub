@@ -10,6 +10,8 @@ on:
   pull_request:
     paths:
       - "crates/kh-app/**"
+      - "crates/kh-mcp/**"
+      - "scripts/prepare-sidecar.mjs"
       - "scripts/smoke-windows.ps1"
       - ".github/workflows/installer.yml"
 
@@ -36,7 +38,8 @@ jobs:
       - name: Build installer
         run: |
           pnpm install --frozen-lockfile
-          pnpm tauri build
+          node scripts/prepare-sidecar.mjs
+          pnpm tauri build --config crates/kh-app/tauri.release.json
       - name: Test file
         run: cargo run --release -p kh-formats --example gen_big_csv -- 100000 100k.csv
       - name: Install, run, measure, uninstall

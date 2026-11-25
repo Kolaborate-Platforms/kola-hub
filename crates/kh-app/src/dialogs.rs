@@ -2,7 +2,7 @@
 
 use std::path::PathBuf;
 
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager};
 use tauri_plugin_dialog::{DialogExt, FilePath};
 
 use kh_service::{AppError, AppResult};
@@ -30,9 +30,14 @@ fn show(app: &AppHandle, what: Pick) -> Option<FilePath> {
     match what {
         Pick::Folder => dialog.blocking_pick_folder(),
         Pick::ArchiveToRead => backups(dialog).blocking_pick_file(),
-        Pick::ArchiveToWrite => backups(dialog)
-            .set_file_name(BACKUP_FILE_NAME)
-            .blocking_save_file(),
+        Pick::ArchiveToWrite => {
+            let mut save = backups(dialog).set_file_name(BACKUP_FILE_NAME);
+            // Without this the system offers the last folder used, often the project itself.
+            if let Ok(documents) = app.path().document_dir() {
+                save = save.set_directory(documents);
+            }
+            save.blocking_save_file()
+        }
     }
 }
 

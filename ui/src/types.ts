@@ -53,6 +53,7 @@ export interface FileRow {
   name: string;
   sizeBytes: number;
   kind: FileKind;
+  hasSteps: boolean;
 }
 
 export interface TrashItem {
