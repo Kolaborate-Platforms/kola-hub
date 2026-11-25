@@ -126,6 +126,38 @@ export function renderSettingsScreen(): { header: HTMLElement; body: HTMLElement
     storageCard.appendChild(usage);
   }
 
+  const aiCard = el("div", "card");
+  aiCard.appendChild(el("h2", "card-title", t("settings.aiHeading")));
+
+  const aiToggle = el("input", "setting-check");
+  aiToggle.type = "checkbox";
+  aiToggle.id = "settings-ai-access";
+  aiToggle.checked = state.settings.aiAccess;
+  aiToggle.setAttribute("aria-label", t("settings.aiAccessLabel"));
+
+  const aiRow = el("label", "setting-row setting-row-click");
+  aiRow.htmlFor = aiToggle.id;
+  const aiInfo = el("div", "setting-info");
+  aiInfo.append(
+    el("div", "setting-label", t("settings.aiAccessLabel")),
+    el("div", "muted", t("settings.aiAccessDesc")),
+  );
+  const aiCtrl = el("div", "setting-ctrl");
+  aiCtrl.appendChild(aiToggle);
+  aiRow.append(aiInfo, aiCtrl);
+  aiCard.appendChild(aiRow);
+
+  const privacyBody = el(
+    "p",
+    "text-green-dark body-sm",
+    state.settings.aiAccess ? t("settings.privacyBodyAiOn") : t("settings.privacyBody"),
+  );
+  aiToggle.addEventListener("change", () => {
+    privacyBody.textContent = aiToggle.checked
+      ? t("settings.privacyBodyAiOn")
+      : t("settings.privacyBody");
+  });
+
   const saveRow = el("div", "mt-md");
   saveRow.appendChild(
     button(t("settings.saveButton"), "primary", async () => {
@@ -133,7 +165,7 @@ export function renderSettingsScreen(): { header: HTMLElement; body: HTMLElement
       const next = {
         language: langSelect.value,
         checkForUpdates: state.settings.checkForUpdates,
-        aiAccess: state.settings.aiAccess,
+        aiAccess: aiToggle.checked,
         storageLimit: Number(limitSelect.value),
         trashRetentionDays: Number(retentionSelect.value),
         labellerName: labeller.length > 0 ? labeller : null,
@@ -146,14 +178,14 @@ export function renderSettingsScreen(): { header: HTMLElement; body: HTMLElement
       }
     }, "check"),
   );
-  storageCard.appendChild(saveRow);
-  leftCol.appendChild(storageCard);
+  aiCard.appendChild(saveRow);
+  leftCol.append(storageCard, aiCard);
 
   // Right column: privacy, shortcuts, about
   const privacyCard = el("div", "card card-soft-green");
   const privHead = el("div", "row-gap");
   privHead.append(icon("lock", "ic-md ic-green"), el("h2", "card-title text-green-dark", t("settings.privacyHeading")));
-  privacyCard.append(privHead, el("p", "text-green-dark body-sm", t("settings.privacyBody")));
+  privacyCard.append(privHead, privacyBody);
 
   const aboutCard = el("div", "card");
   aboutCard.append(

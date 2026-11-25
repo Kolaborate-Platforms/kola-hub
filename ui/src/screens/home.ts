@@ -137,7 +137,56 @@ function renderBottomCards(): HTMLElement {
   return grid;
 }
 
+function renderFirstRunScreen(): { header: HTMLElement; body: HTMLElement } {
+  const header = el("div", "topbar");
+  const headText = el("div", "topbar-text");
+  headText.append(
+    el("h1", "topbar-title", t("home.title")),
+    el("div", "topbar-sub", t("home.subtitle", { version: state.version })),
+  );
+  header.appendChild(headText);
+
+  const body = el("div", "page-body");
+  const card = el("div", "card first-run-card");
+  card.append(
+    badge(t("home.firstRunTag"), "grey"),
+    el("h2", "hero-title mt-sm", t("home.firstRunTitle")),
+    el("p", "hero-sub mt-sm", t("home.firstRunBody")),
+  );
+
+  const folderRow = el("div", "lv mt-md");
+  const folderText = el("div");
+  folderText.append(
+    el("div", "bold", t("home.firstRunFolderHeading")),
+    el("div", "muted", t("home.firstRunFolderBody")),
+  );
+  folderRow.append(icon("folder", "ic-md"), folderText);
+
+  const offlineRow = el("div", "lv");
+  const offlineText = el("div");
+  offlineText.append(
+    el("div", "bold", t("home.firstRunOfflineHeading")),
+    el("div", "muted", t("home.firstRunOfflineBody")),
+  );
+  offlineRow.append(icon("offline", "ic-md"), offlineText);
+
+  const actions = el("div", "mt-md");
+  actions.appendChild(
+    button(t("home.openFolder"), "primary", () => {
+      void pickAndOpenProject();
+    }, "folder"),
+  );
+
+  card.append(folderRow, offlineRow, actions);
+  body.appendChild(card);
+  return { header, body };
+}
+
 export function renderHomeScreen(): { header: HTMLElement; body: HTMLElement } {
+  if (state.recentProjects.length === 0 && !state.activeProject) {
+    return renderFirstRunScreen();
+  }
+
   const header = el("div", "topbar");
   const headText = el("div", "topbar-text");
   headText.append(

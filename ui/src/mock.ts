@@ -434,6 +434,14 @@ async function loadMockStrings(): Promise<StringCatalogue> {
   };
 }
 
+function syncFileHasSteps(session: MockSession): void {
+  const list = filesByProject[session.projectId];
+  const file = list?.find((f) => f.id === session.fileId);
+  if (file) {
+    file.hasSteps = session.steps.length > 0;
+  }
+}
+
 function getSession(id: string): MockSession {
   const s = sessions.get(id);
   if (!s) throw { code: "not_found", message: "That Clean session is no longer open." };
@@ -616,6 +624,7 @@ export async function mockInvoke<T>(cmd: string, args: Record<string, unknown> =
       s.redo = [];
       s.steps.push({ name: stepName(step), enabled: true, step });
       savedStepsByFile.set(s.fileId, [...s.steps]);
+      syncFileHasSteps(s);
       return buildState(s) as T;
     }
     case "clean_undo": {
@@ -623,6 +632,7 @@ export async function mockInvoke<T>(cmd: string, args: Record<string, unknown> =
       const last = s.steps.pop();
       if (last) s.redo.push(last);
       savedStepsByFile.set(s.fileId, [...s.steps]);
+      syncFileHasSteps(s);
       return buildState(s) as T;
     }
     case "clean_redo": {
@@ -630,6 +640,7 @@ export async function mockInvoke<T>(cmd: string, args: Record<string, unknown> =
       const next = s.redo.pop();
       if (next) s.steps.push(next);
       savedStepsByFile.set(s.fileId, [...s.steps]);
+      syncFileHasSteps(s);
       return buildState(s) as T;
     }
     case "clean_move_step": {
@@ -654,6 +665,7 @@ export async function mockInvoke<T>(cmd: string, args: Record<string, unknown> =
       const s = getSession(String(args.sessionId));
       s.steps.splice(Number(args.index), 1);
       savedStepsByFile.set(s.fileId, [...s.steps]);
+      syncFileHasSteps(s);
       return buildState(s) as T;
     }
     case "clean_fix_cell": {
@@ -685,6 +697,7 @@ export async function mockInvoke<T>(cmd: string, args: Record<string, unknown> =
       };
       s.steps = sourceSteps.map((st) => ({ ...st }));
       savedStepsByFile.set(s.fileId, [...s.steps]);
+      syncFileHasSteps(s);
       const res: ReuseResult = { report, state: buildState(s) };
       return res as T;
     }

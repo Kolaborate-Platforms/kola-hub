@@ -5,9 +5,11 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p ui",
     "build:ui": "tsc -p ui && node ui/copy-static.mjs",
+    "build:preview": "tsc -p ui && node ui/copy-static.mjs --preview",
     "tauri": "tauri"
   },
   "devDependencies": {
+    "@fontsource/poppins": "5.3.0",
     "@tauri-apps/cli": "^2",
     "typescript": "^5"
   }

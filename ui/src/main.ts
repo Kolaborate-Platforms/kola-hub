@@ -1,4 +1,4 @@
-import { api, isTauriRuntime } from "./api.js";
+import { api, hasMockBackend, isTauriRuntime } from "./api.js";
 import { runBenchMode } from "./bench.js";
 import { button, clear, el, icon, type IconName } from "./dom.js";
 import { initStrings, t } from "./i18n.js";
@@ -103,12 +103,29 @@ function renderRail(): HTMLElement {
 function renderNoticeBanner(): HTMLElement | null {
   if (!state.notice) return null;
   const bar = el("div", `notice-bar notice-${state.notice.tone}`);
-  bar.setAttribute("role", "status");
+  bar.setAttribute("role", state.notice.tone === "red" ? "alert" : "status");
   bar.append(
     el("span", "", state.notice.text),
     button(t("common.dismiss"), "ghost", () => clearNotice()),
   );
   return bar;
+}
+
+function renderUnavailableScreen(root: HTMLElement): void {
+  clear(root);
+  const wrap = el("main", "unavailable-wrap");
+  const card = el("div", "card unavailable-card");
+  card.setAttribute("role", "alert");
+  card.append(
+    el("h1", "hero-title", "Kola Hub needs the desktop app"),
+    el(
+      "p",
+      "muted mt-sm",
+      "This screen cannot run on its own in a web browser. Open Kola Hub from your computer instead.",
+    ),
+  );
+  wrap.appendChild(card);
+  root.appendChild(wrap);
 }
 
 function renderCurrentScreen(): { header: HTMLElement; body: HTMLElement } {
@@ -191,6 +208,11 @@ function installShortcuts(): void {
 
 async function bootstrap(): Promise<void> {
   const root = document.getElementById("app") as HTMLElement;
+
+  if (!isTauriRuntime() && !(await hasMockBackend())) {
+    renderUnavailableScreen(root);
+    return;
+  }
 
   if (isTauriRuntime()) {
     try {

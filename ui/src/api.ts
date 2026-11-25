@@ -1,3 +1,4 @@
+import { hasString, t } from "./i18n.js";
 import type {
   AppInfo,
   BackupProgress,
@@ -32,9 +33,21 @@ function hasTauri(): boolean {
 
 async function getMock(): Promise<MockModule> {
   if (!mockPromise) {
-    mockPromise = import("./mock.js");
+    mockPromise = import("./mock.js").catch((err) => {
+      mockPromise = null;
+      throw err;
+    });
   }
   return mockPromise;
+}
+
+export async function hasMockBackend(): Promise<boolean> {
+  try {
+    await getMock();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function extractErrorMessage(err: unknown): string {
@@ -43,6 +56,12 @@ export function extractErrorMessage(err: unknown): string {
   }
   if (err && typeof err === "object") {
     const record = err as Record<string, unknown>;
+    if (typeof record.code === "string" && record.code.trim() !== "") {
+      const key = `error.${record.code.trim()}`;
+      if (hasString(key)) {
+        return t(key);
+      }
+    }
     if (typeof record.message === "string" && record.message.trim() !== "") {
       return record.message;
     }

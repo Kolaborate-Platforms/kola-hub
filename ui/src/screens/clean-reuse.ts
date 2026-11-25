@@ -1,18 +1,20 @@
 import { api } from "../api.js";
 import { badge, button, el } from "../dom.js";
 import { formatNumber, t } from "../i18n.js";
-import { refreshCleanProfile, renderApp, showError, state } from "../state.js";
+import { refreshCleanProfile, refreshProjectData, renderApp, showError, state } from "../state.js";
 import { renderNeedsPersonCard } from "./clean-fix.js";
 
 let chosenSourceFileId = "";
 
 export function renderCleanReuse(onSave: () => void): HTMLElement {
   const session = state.cleanSession!;
-  const otherCsvs = state.files.filter(
-    (f) => f.kind === "csv" && f.name !== session.fileName,
+  const reusableFiles = state.files.filter(
+    (f) => f.kind === "csv" && f.hasSteps && f.id !== state.cleanFileId && f.name !== session.fileName,
   );
-  if (otherCsvs.length > 0 && !otherCsvs.some((f) => f.id === chosenSourceFileId)) {
-    chosenSourceFileId = otherCsvs[0].id;
+  if (reusableFiles.length > 0 && !reusableFiles.some((f) => f.id === chosenSourceFileId)) {
+    chosenSourceFileId = reusableFiles[0].id;
+  } else if (reusableFiles.length === 0) {
+    chosenSourceFileId = "";
   }
 
   const grid = el("div", "grid-2");
@@ -24,12 +26,12 @@ export function renderCleanReuse(onSave: () => void): HTMLElement {
     el("p", "muted", t("clean.reuseDesc", { file: session.fileName })),
   );
 
-  if (otherCsvs.length === 0) {
-    pickCard.appendChild(el("div", "note note-neutral mt-sm", t("clean.reuseNoOtherFiles")));
+  if (reusableFiles.length === 0) {
+    pickCard.appendChild(el("div", "note note-neutral mt-sm", t("clean.reuseNoFilesWithSteps")));
   } else {
     const sel = el("select", "inp mt-sm");
     sel.setAttribute("aria-label", t("clean.reuseHeading"));
-    for (const f of otherCsvs) {
+    for (const f of reusableFiles) {
       const opt = el("option", "", f.name);
       opt.value = f.id;
       sel.appendChild(opt);
@@ -48,7 +50,7 @@ export function renderCleanReuse(onSave: () => void): HTMLElement {
           state.cleanReuseResult = result;
           if (result.state) {
             state.cleanSession!.state = result.state;
-            await refreshCleanProfile();
+            await Promise.all([refreshCleanProfile(), refreshProjectData()]);
           }
           renderApp();
         } catch (err) {
@@ -85,23 +87,25 @@ export function renderCleanReuse(onSave: () => void): HTMLElement {
   }
   grid.appendChild(matchCard);
 
-  // Card 3: Result summary
-  const summary = reuse?.state?.summary ?? session.state.summary;
-  const resultCard = el("div", "card");
-  resultCard.appendChild(el("h2", "card-title", t("clean.reuseResultHeading")));
-  const stats = el("div", "stats-row mt-sm");
-  const r1 = el("div");
-  r1.append(el("div", "muted", t("clean.reuseRowsIn")), el("div", "stat-val", formatNumber(summary.rowsIn)));
-  const r2 = el("div");
-  r2.append(el("div", "muted", t("clean.reuseRowsOut")), el("div", "stat-val", formatNumber(summary.rowsOut)));
-  const r3 = el("div");
-  r3.append(
-    el("div", "muted", t("clean.reuseNeedPerson")),
-    el("div", "stat-val text-amber", formatNumber(summary.rowsNeedingPerson)),
-  );
-  stats.append(r1, r2, r3);
-  resultCard.appendChild(stats);
-  grid.appendChild(resultCard);
+  // Card 3: Result summary (shown only after a run)
+  if (reuse?.state) {
+    const summary = reuse.state.summary;
+    const resultCard = el("div", "card");
+    resultCard.appendChild(el("h2", "card-title", t("clean.reuseResultHeading")));
+    const stats = el("div", "stats-row mt-sm");
+    const r1 = el("div");
+    r1.append(el("div", "muted", t("clean.reuseRowsIn")), el("div", "stat-val", formatNumber(summary.rowsIn)));
+    const r2 = el("div");
+    r2.append(el("div", "muted", t("clean.reuseRowsOut")), el("div", "stat-val", formatNumber(summary.rowsOut)));
+    const r3 = el("div");
+    r3.append(
+      el("div", "muted", t("clean.reuseNeedPerson")),
+      el("div", "stat-val text-amber", formatNumber(summary.rowsNeedingPerson)),
+    );
+    stats.append(r1, r2, r3);
+    resultCard.appendChild(stats);
+    grid.appendChild(resultCard);
+  }
 
   // Card 4: Save
   const saveCard = el("div", "card");

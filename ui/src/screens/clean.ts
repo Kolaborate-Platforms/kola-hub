@@ -3,6 +3,7 @@ import { badge, button, el, icon } from "../dom.js";
 import { formatBytes, t } from "../i18n.js";
 import type { VirtualGridHandle } from "../grid.js";
 import {
+  clearSuccessNotice,
   openCleanFile,
   pickAndOpenProject,
   refreshCleanProfile,
@@ -31,7 +32,7 @@ export async function runCleanUndo(): Promise<void> {
   try {
     state.cleanSession.state = await api.cleanUndo(state.cleanSession.sessionId);
     state.cleanPreviewStep = null;
-    await refreshCleanProfile();
+    await Promise.all([refreshCleanProfile(), refreshProjectData()]);
     renderApp();
   } catch (err) {
     showError(err);
@@ -43,7 +44,7 @@ export async function runCleanRedo(): Promise<void> {
   try {
     state.cleanSession.state = await api.cleanRedo(state.cleanSession.sessionId);
     state.cleanPreviewStep = null;
-    await refreshCleanProfile();
+    await Promise.all([refreshCleanProfile(), refreshProjectData()]);
     renderApp();
   } catch (err) {
     showError(err);
@@ -126,6 +127,7 @@ function renderTabs(): HTMLElement {
     btn.setAttribute("role", "tab");
     btn.setAttribute("aria-selected", String(active));
     btn.addEventListener("click", () => {
+      clearSuccessNotice();
       state.cleanTab = tabId;
       renderApp();
     });
@@ -156,9 +158,12 @@ export function renderCleanScreen(): { header: HTMLElement; body: HTMLElement } 
   const redoBtn = button(t("clean.redo"), "ghost", () => void runCleanRedo(), "redo");
   redoBtn.disabled = !session.state.canRedo;
   const switchBtn = button(t("clean.closeFile"), "outline", async () => {
+    clearSuccessNotice();
     await api.cleanClose(session.sessionId).catch(() => undefined);
+    state.cleanFileId = null;
     state.cleanSession = null;
     state.cleanProfile = null;
+    state.cleanSpellingSuggestions = [];
     state.cleanPreviewStep = null;
     state.cleanReuseResult = null;
     renderApp();

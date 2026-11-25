@@ -65,4 +65,4 @@ Each new dependency needs a reason, a licence check and a size check in its PR. 
 
 | Asset | Source | Licence | Notes |
 |-------|--------|---------|-------|
-| Poppins (to be subset to Latin, two weights) | Google Fonts | OFL-1.1 | Not yet added. OFL permits bundling. Keep the licence text beside the font files |
+| Poppins (Latin subset, weights 400 and 600, WOFF2) | `@fontsource/poppins` 5.3.0 (from Google Fonts) | OFL-1.1 | Copied into `ui/dist/fonts/` at build time alongside `LICENSE` (~16 KB total) |

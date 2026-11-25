@@ -20,13 +20,15 @@ function isExcelFile(name: string): boolean {
 
 function renderFileList(): HTMLElement {
   const tableWrap = el("div", "data-table");
+  tableWrap.setAttribute("role", "table");
+  tableWrap.setAttribute("aria-label", t("files.title"));
   const head = el("div", "dt-row dt-head files-cols");
-  head.append(
-    el("div", "dt-cell", t("files.colName")),
-    el("div", "dt-cell", t("files.colType")),
-    el("div", "dt-cell", t("files.colSize")),
-    el("div", "dt-cell", t("files.colOpensIn")),
-  );
+  head.setAttribute("role", "row");
+  for (const key of ["files.colName", "files.colType", "files.colSize", "files.colOpensIn"]) {
+    const colHead = el("div", "dt-cell", t(key));
+    colHead.setAttribute("role", "columnheader");
+    head.appendChild(colHead);
+  }
   tableWrap.appendChild(head);
 
   if (state.files.length === 0) {
@@ -38,21 +40,27 @@ function renderFileList(): HTMLElement {
     const selected = state.selectedFileId === file.id;
     const row = el("button", selected ? "dt-row dt-row-btn files-cols selected" : "dt-row dt-row-btn files-cols");
     row.type = "button";
+    row.setAttribute("role", "row");
+    row.setAttribute("aria-pressed", String(selected));
 
     const nameCell = el("div", "dt-cell file-name-cell");
+    nameCell.setAttribute("role", "cell");
     nameCell.append(icon(file.kind === "csv" ? "clean" : "folder", "ic-sm"), el("span", "truncate", file.name));
 
     const typeCell = el("div", "dt-cell");
+    typeCell.setAttribute("role", "cell");
     typeCell.appendChild(
       badge(file.kind === "csv" ? t("files.typeCsv") : t("files.typeOther"), file.kind === "csv" ? "green" : "grey"),
     );
 
     const sizeCell = el("div", "dt-cell", formatBytes(file.sizeBytes));
+    sizeCell.setAttribute("role", "cell");
     const opensCell = el(
       "div",
       "dt-cell",
       file.kind === "csv" ? t("files.opensInClean") : t("files.opensInUnsupported"),
     );
+    opensCell.setAttribute("role", "cell");
 
     row.append(nameCell, typeCell, sizeCell, opensCell);
     row.addEventListener("click", () => {

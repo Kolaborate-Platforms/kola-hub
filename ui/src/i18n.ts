@@ -12,6 +12,10 @@ export function initStrings(next: StringCatalogue): void {
   catalogue = next;
 }
 
+export function hasString(key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(catalogue, key);
+}
+
 /**
  * Matches `kh_settings::translate`: selects English one/other plural form and
  * replaces `{placeholder}` in a single pass so values with braces never re-expand.
