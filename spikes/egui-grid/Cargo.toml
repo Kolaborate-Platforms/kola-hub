@@ -1,0 +1,25 @@
+[package]
+name = "egui-grid"
+version = "0.0.0"
+edition = "2024"
+license = "Apache-2.0"
+rust-version = "1.97"
+publish = false
+
+[workspace]
+
+[dependencies]
+kh-core = { path = "../../crates/kh-core" }
+kh-formats = { path = "../../crates/kh-formats" }
+eframe = { version = "0.37", default-features = false, features = ["glow", "default_fonts"] }
+egui_extras = { version = "0.37", default-features = false }
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[profile.release]
+opt-level = "s"
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
