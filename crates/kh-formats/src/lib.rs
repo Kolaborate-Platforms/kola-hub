@@ -4,5 +4,7 @@
 //! instead of using unbounded memory.
 
 mod csv_read;
+mod csv_write;
 
 pub use csv_read::{CsvError, CsvLimits, CsvReport, read_csv, sniff_delimiter};
+pub use csv_write::{CsvWriteError, CsvWriteOptions, neutralise_cell, write_csv};
