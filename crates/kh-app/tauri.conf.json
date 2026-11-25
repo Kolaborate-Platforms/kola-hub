@@ -1,21 +1,22 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Kola Hub Grid",
+  "$schema": "../../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Kola Hub",
   "version": "0.1.0",
-  "identifier": "org.kolahub.taurigrid",
+  "identifier": "co.kolaborate.kolahub",
   "build": {
     "beforeBuildCommand": "pnpm run build:ui",
-    "frontendDist": "../dist"
+    "frontendDist": "../../ui/dist"
   },
   "app": {
     "withGlobalTauri": true,
     "windows": [
       {
         "label": "main",
-        "title": "Kola Hub Grid",
+        "title": "Kola Hub",
         "width": 1366,
         "height": 768,
-        "resizable": true
+        "resizable": true,
+        "dragDropEnabled": false
       }
     ],
     "security": {
@@ -24,7 +25,9 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis"],
+    "targets": [
+      "nsis"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

@@ -2,10 +2,20 @@
 
 [graph]
 all-features = true
+# Desktop only. Tauri lists HTTP crates for phone builds, which we never make.
+targets = [
+  "x86_64-pc-windows-msvc",
+  "x86_64-unknown-linux-gnu",
+  "aarch64-apple-darwin",
+  "x86_64-apple-darwin",
+]
 
 [advisories]
 version = 2
 yanked = "deny"
+ignore = [
+  { id = "RUSTSEC-2024-0370", reason = "proc-macro-error is unmaintained, build time only, comes with Tauri" },
+]
 
 [licenses]
 version = 2
@@ -22,6 +32,14 @@ allow = [
   "CC0-1.0",
 ]
 confidence-threshold = 0.9
+# MPL-2.0 crates that Tauri cannot do without. the maintainer approved these five names only on 25 November 2026.
+exceptions = [
+  { crate = "cssparser", allow = ["MPL-2.0"] },
+  { crate = "cssparser-macros", allow = ["MPL-2.0"] },
+  { crate = "dtoa-short", allow = ["MPL-2.0"] },
+  { crate = "option-ext", allow = ["MPL-2.0"] },
+  { crate = "selectors", allow = ["MPL-2.0"] },
+]
 
 [bans]
 multiple-versions = "warn"
@@ -41,6 +59,10 @@ deny = [
   { crate = "curl-sys", wrappers = ["kh-update"] },
   { crate = "openssl", wrappers = ["kh-update"] },
   { crate = "native-tls", wrappers = ["kh-update"] },
+  # Only the shell may know about the window toolkit, so it stays replaceable.
+  { crate = "tauri", wrappers = ["kh-app"] },
+  # Updates belong to kh-update. This plugin would put an HTTP client in the shell.
+  { crate = "tauri-plugin-updater" },
   # Telemetry and crash upload are never allowed anywhere.
   { crate = "sentry" },
   { crate = "sentry-core" },

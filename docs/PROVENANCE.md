@@ -52,6 +52,8 @@ Each new dependency needs a reason, a licence check and a size check in its PR. 
 | `csv` | 1.x | Unlicense OR MIT | Streaming CSV reader | Not measured yet |
 | `tempfile` | 3.x | MIT OR Apache-2.0 | Tests only | Not shipped |
 | `proptest` | 1.x | MIT OR Apache-2.0 | Fuzz style tests only | Not shipped |
+| `tauri`, `tauri-build` | 2.x | Apache-2.0 OR MIT | The window shell (spec decision 2). Brings seven MPL-2.0 crates, listed in `deny.toml` | App 4.73 MB on macOS. Windows not measured |
+| `serde`, `serde_json` | 1.x | MIT OR Apache-2.0 | Command types between shell and interface | Included above |
 
 ## Bundled assets
 

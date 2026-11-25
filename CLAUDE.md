@@ -24,7 +24,8 @@ and little or no internet. Size, start-up time, memory and offline behaviour mat
 - **Budgets are tests.** Installer size, installed size, start-up, memory and large-file timings are in spec
   section 4. A PR that breaks them fails CI. Report measured numbers in any PR that could change them.
 - **Treat every opened file as hostile.** Size limits, zip-bomb limits, no macros, fuzz the parsers.
-- **Licence hygiene.** Permissive licences only (MIT, Apache-2.0, BSD). No GPL or AGPL. Code from the maintainer's
+- **Licence hygiene.** Permissive licences only (MIT, Apache-2.0, BSD). No GPL or AGPL. The only exceptions are the
+  MPL-2.0 crates named in `deny.toml`, which Tauri requires. Code from the maintainer's
   Agent HQ or hq-suite may be copied only with an entry in `docs/PROVENANCE.md` showing his sign-off. Code from
   storytold/craft-libs only after the check described in spec section 11.3.
 - **Do not add scope.** Two tools until the pilot gate passes. If a task seems to need an account, a server,

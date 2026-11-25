@@ -1,10 +1,10 @@
 {
-  "name": "kola-hub-tauri-grid",
+  "name": "kola-hub",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "build:ui": "tsc && node scripts/copy-static.mjs",
+    "typecheck": "tsc --noEmit -p ui",
+    "build:ui": "tsc -p ui && node ui/copy-static.mjs",
     "tauri": "tauri"
   },
   "devDependencies": {

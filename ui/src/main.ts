@@ -30,7 +30,7 @@ async function afterPaint(): Promise<void> {
   await nextFrame();
 }
 
-// Nearest rank, the same rule as the egui demo.
+// Nearest rank.
 function percentile(sorted: number[], p: number): number {
   if (sorted.length === 0) return 0;
   const rank = Math.ceil((p / 100) * sorted.length);

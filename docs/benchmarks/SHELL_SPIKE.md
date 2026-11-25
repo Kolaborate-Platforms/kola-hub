@@ -5,6 +5,8 @@ Date: 25 November 2026. Status: **Tauri chosen**. The Windows tests have not bee
 **None of these are reference-machine numbers.** They come from a developer Mac (Apple M4 Pro, 12 cores, 24 GB,
 macOS, release builds). The target is a 2 core Windows 10 laptop with 4 GB RAM and a spinning disk.
 
+The Tauri demo now lives in `crates/kh-app` and `ui/`. Bench mode is described in `docs/contracts/bench-mode.md`.
+
 ## What was built
 
 Two demos that follow `spikes/README.md`: a grid over the whole CSV that fetches only the visible rows, one

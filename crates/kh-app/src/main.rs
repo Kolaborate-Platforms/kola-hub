@@ -3,5 +3,5 @@
 
 fn main() {
     let started_at = std::time::Instant::now();
-    tauri_grid_lib::run(started_at);
+    kh_app::run(started_at);
 }
