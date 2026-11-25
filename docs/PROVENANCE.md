@@ -12,7 +12,7 @@ Rules in short:
 
 | Date | What | Source repo | Path | Commit | Licence | Sign-off (the maintainer) | Notes |
 |------|------|-------------|------|--------|---------|-------------------|-------|
-|      |      |             |      |        |         |                   |       |
+| 2026-11-25 | Atomic file writing | `storytold/craft-libs` | `crates/atomic/src/lib.rs` | `05b99ee5dcd64f2c954a693ef361301214ddc3c7` | MIT OR Apache-2.0 (used under Apache-2.0) | Not needed (not the maintainer's code) | In `crates/kh-store/src/atomic.rs`. One test path changed. Needs `rustix` on macOS |
 
 ## Candidate crates from storytold/craft-libs
 

@@ -138,6 +138,10 @@ version = "0.0.0"
 [[package]]
 name = "kh-store"
 version = "0.0.0"
+dependencies = [
+ "rustix",
+ "tempfile",
+]
 
 [[package]]
 name = "kh-update"
