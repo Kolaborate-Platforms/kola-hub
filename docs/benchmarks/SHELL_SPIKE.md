@@ -107,4 +107,5 @@ budgets.
 |----------|-----------|------|
 | Shell: Tauri, with the offline WebView2 installer | Maintainer | 25 November 2026 |
 | Installer size budget changed to include WebView2 | Maintainer | 25 November 2026 |
+| Offline installer budget raised to 300 MB, and a small installer added for download links | Maintainer | 26 November 2026 |
 | Other budgets (spec section 4) | not signed | |

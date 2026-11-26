@@ -1,0 +1,2 @@
+# Tests compare files byte for byte, so Windows must not turn line endings into CRLF.
+* text=auto eol=lf

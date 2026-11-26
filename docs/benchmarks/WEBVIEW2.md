@@ -14,6 +14,10 @@ The “additional size” figures below are Tauri's documented approximate costs
 
 Tauri's standard Windows installer defaults to a per-user app installation and does not require administrator rights. Selecting `perMachine`, or offering `both`, requires administrator rights. Microsoft's WebView2 bootstrapper and standalone runtime installer support per-user installs when not elevated, so the offline Evergreen option itself does not inherently require admin rights. `fixedRuntime` uses the bundled runtime rather than installing a shared runtime.
 
+Measured on 26 November 2026: Microsoft's x64 standalone installer was 294,302,984 bytes (281 MB), and the first
+Kola Hub installer carrying it was 286.3 MB. The 127 MB figure above is out of date. Releases now ship that offline
+installer and a small one using `embedBootstrapper`.
+
 ## Runtime availability and support
 
 Microsoft says the Evergreen WebView2 Runtime is included in Windows 11, and that the vast majority of Windows 10 devices already have it, but a small number do not. It advises checking on the machine. Tauri's installer page says it ships with Windows 10 from the April 2018 release. Do not rely on `skip` until the actual machine has been checked.
