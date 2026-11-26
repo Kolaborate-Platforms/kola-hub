@@ -1,7 +1,7 @@
 # Kola Hub: build spec
 
 Version 1.0, 25 November 2026.
-Repository: `Kolaborate-Platforms/kola-hub`. Licence: Apache-2.0.
+Repository: `kolaborateplatform/kola-hub`. Licence: Apache-2.0.
 
 This is the document a coding agent builds from. Read it top to bottom once, then work from section 14
 (first tasks). When this spec and any other document disagree, this spec wins. When something here is
