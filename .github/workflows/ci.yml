@@ -54,7 +54,7 @@ jobs:
       - name: Clippy
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: Tests
-        run: cargo nextest run --workspace --no-tests=pass
+        run: cargo nextest run --workspace --no-tests=pass --no-fail-fast
       - name: Interface types match the commands
         if: runner.os == 'Linux'
         run: bash scripts/check-contract.sh
