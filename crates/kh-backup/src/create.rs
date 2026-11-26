@@ -28,16 +28,19 @@ struct Scan {
 }
 
 fn is_link_like(meta: &fs::Metadata) -> bool {
-    if meta.file_type().is_symlink() {
-        return true;
-    }
-    #[cfg(windows)]
-    {
-        use std::os::windows::fs::MetadataExt;
-        // A junction or other reparse point.
-        return meta.file_attributes() & 0x400 != 0;
-    }
-    #[cfg(not(windows))]
+    meta.file_type().is_symlink() || is_reparse_point(meta)
+}
+
+/// A junction or other reparse point.
+#[cfg(windows)]
+fn is_reparse_point(meta: &fs::Metadata) -> bool {
+    use std::os::windows::fs::MetadataExt;
+    const FILE_ATTRIBUTE_REPARSE_POINT: u32 = 0x400;
+    meta.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0
+}
+
+#[cfg(not(windows))]
+fn is_reparse_point(_: &fs::Metadata) -> bool {
     false
 }
 
