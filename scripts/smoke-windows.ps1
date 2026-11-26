@@ -17,8 +17,6 @@ Write-Output ('Installer: {0} {1:N1} MB (limit {2})' -f $setup[0].Name, $setupMB
 $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $setup[0].FullName).Hash.ToLower()
 "$hash  $($setup[0].Name)" | Set-Content -Encoding ascii -Path (Join-Path $InstallerDir 'SHA256SUMS')
 
-if ($setupMB -gt $InstallerLimitMB) { throw 'Installer is over its size budget' }
-
 $install = Start-Process -FilePath $setup[0].FullName -ArgumentList '/S' -Wait -PassThru
 if ($install.ExitCode -ne 0) { throw "Install failed with code $($install.ExitCode)" }
 
@@ -40,5 +38,7 @@ try {
 $deadline = (Get-Date).AddSeconds(60)
 while ((Test-Path -LiteralPath $exe) -and (Get-Date) -lt $deadline) { Start-Sleep -Seconds 1 }
 if (Test-Path -LiteralPath $exe) { throw 'Uninstall left the app behind' }
+# Size budgets are checked last, so an oversized build still shows whether it installs and runs.
+if ($setupMB -gt $InstallerLimitMB) { throw 'Installer is over its size budget' }
 if ($installedMB -gt $InstalledLimitMB) { throw 'Installed size is over its budget' }
 Write-Output 'Smoke test passed'
