@@ -2,7 +2,9 @@ This is an early test build. Please use copies of your files, and tell us what g
 
 ## Windows 10 and 11 (64-bit)
 
-1. Download the file ending in `setup.exe`.
+1. Download one installer:
+   - `x64-setup.exe` is small. Use this one if the computer is online.
+   - `x64-offline-setup.exe` is much larger and installs with no internet, for example from a USB stick.
 2. Open it. Windows may say "Windows protected your PC" because the installer is not signed yet. Choose
    **More info**, then **Run anyway**.
 3. It installs for your user only and does not need an administrator.

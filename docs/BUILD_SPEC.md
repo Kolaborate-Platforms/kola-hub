@@ -79,7 +79,8 @@ A maintainer signs off the final budgets. After that, CI fails a PR that breaks 
 
 | Area | Budget |
 |------|--------|
-| Installer size (Windows, offline installer with WebView2 inside) | 155 MB or less: 25 MB for the app plus about 127 MB for WebView2, accepted on 25 November 2026 |
+| Offline installer size (Windows, with WebView2 inside) | 300 MB or less. Microsoft's runtime alone measured 281 MB. Accepted on 26 November 2026 |
+| Small installer size (Windows, for download links) | 25 MB or less. It fetches WebView2 from Microsoft only if the computer lacks it |
 | Installed size, all phase 1 and 2 tools | 60 MB or less |
 | Cold start to usable home screen, reference machine | 2 s or less |
 | Idle memory with home screen open | 150 MB or less |
@@ -89,7 +90,7 @@ A maintainer signs off the final budgets. After that, CI fails a PR that breaks 
 | Apply any single Clean step to 100,000 rows | 1 s or less (preview on the visible window is instant) |
 | Label a text record (key press to saved) | 30 ms or less on a spinning disk |
 | Network calls other than the update check | Zero |
-| Installer works with no internet | Yes, on a clean Windows 10 machine |
+| Offline installer works with no internet | Yes, on a clean Windows 10 machine |
 
 **The WebView2 problem (Unverified).** Tauri on Windows draws with Microsoft's WebView2 runtime. Windows 11 and
 up-to-date Windows 10 normally have it. An old Windows 10 machine with no internet may not. Tauri's offline

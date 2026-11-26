@@ -2,20 +2,17 @@
 # Budgets are from docs/BUILD_SPEC.md section 4. Windows PowerShell 5.1, no admin rights.
 param(
     [Parameter(Mandatory = $true)][string]$InstallerDir,
-    [Parameter(Mandatory = $true)][string]$Csv
+    [Parameter(Mandatory = $true)][string]$Csv,
+    [Parameter(Mandatory = $true)][int]$InstallerLimitMB
 )
 
 $ErrorActionPreference = 'Stop'
-$InstallerLimitMB = 155
 $InstalledLimitMB = 60
 
 $setup = @(Get-ChildItem -Path $InstallerDir -Filter '*-setup.exe')
 if ($setup.Count -ne 1) { throw "Expected one installer in $InstallerDir, found $($setup.Count)" }
 $setupMB = $setup[0].Length / 1MB
 Write-Output ('Installer: {0} {1:N1} MB (limit {2})' -f $setup[0].Name, $setupMB, $InstallerLimitMB)
-
-$hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $setup[0].FullName).Hash.ToLower()
-"$hash  $($setup[0].Name)" | Set-Content -Encoding ascii -Path (Join-Path $InstallerDir 'SHA256SUMS')
 
 $install = Start-Process -FilePath $setup[0].FullName -ArgumentList '/S' -Wait -PassThru
 if ($install.ExitCode -ne 0) { throw "Install failed with code $($install.ExitCode)" }

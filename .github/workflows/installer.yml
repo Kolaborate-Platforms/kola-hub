@@ -42,22 +42,37 @@ jobs:
         with:
           node-version: 24
           package-manager-cache: false
-      - name: Build installer
+      - name: Build the offline installer
         run: |
           pnpm install --frozen-lockfile
           node scripts/prepare-sidecar.mjs
           pnpm tauri build --config crates/kh-app/tauri.release.json
+      # Both builds write the same file name, so each one is moved away before the next.
+      - name: Keep the offline installer
+        shell: bash
+        run: |
+          mkdir -p target/installers/offline target/installers/small
+          for file in target/release/bundle/nsis/*-setup.exe; do
+            mv "$file" "target/installers/offline/$(basename "${file%-setup.exe}")-offline-setup.exe"
+          done
+      - name: Build the small installer
+        shell: bash
+        run: |
+          pnpm tauri build --config crates/kh-app/tauri.release.json --config crates/kh-app/tauri.online.json
+          mv target/release/bundle/nsis/*-setup.exe target/installers/small/
       - name: Test file
         run: cargo run --release -p kh-formats --example gen_big_csv -- 100000 100k.csv
-      - name: Install, run, measure, uninstall
+      - name: Install, run, measure, uninstall (small installer)
         shell: powershell
-        run: ./scripts/smoke-windows.ps1 -InstallerDir target/release/bundle/nsis -Csv 100k.csv
+        run: ./scripts/smoke-windows.ps1 -InstallerDir target/installers/small -InstallerLimitMB 25 -Csv 100k.csv
+      - name: Install, run, measure, uninstall (offline installer)
+        shell: powershell
+        run: ./scripts/smoke-windows.ps1 -InstallerDir target/installers/offline -InstallerLimitMB 300 -Csv 100k.csv
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: kola-hub-windows
-          path: |
-            target/release/bundle/nsis/*.exe
-            target/release/bundle/nsis/SHA256SUMS
+          path: target/installers/*/*-setup.exe
+          if-no-files-found: error
 
   macos:
     runs-on: macos-latest
